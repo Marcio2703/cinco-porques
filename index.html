@@ -1,0 +1,532 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>5 Porques - Analise de Causa Raiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:#F1F5F9;min-height:100vh;color:#1E293B}
+.app{max-width:720px;margin:0 auto;padding:1rem}
+.header{display:flex;align-items:center;gap:12px;background:#0A1628;border-radius:14px;padding:1rem 1.25rem;margin-bottom:1.25rem}
+.logo{width:42px;height:42px;background:#F97316;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0}
+.header h1{color:#fff;font-size:17px;font-weight:600}
+.header p{color:#8BA3C0;font-size:12px;margin-top:2px}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.user-info{color:#8BA3C0;font-size:12px;text-align:right}
+.btn-logout{padding:6px 12px;background:transparent;color:#8BA3C0;border:1px solid #2D4A6B;border-radius:6px;font-size:12px;cursor:pointer;font-family:Inter,sans-serif}
+.btn-logout:hover{color:#fff;border-color:#fff}
+.tabs{display:flex;gap:4px;margin-bottom:1.25rem;background:#fff;border-radius:10px;padding:4px;border:1px solid #E2E8F0}
+.tab{flex:1;padding:8px 4px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;text-align:center;color:#64748B;border:none;background:none;transition:all 0.15s}
+.tab.active{background:#0A1628;color:#F97316}
+.page{display:none}.page.active{display:block}
+.card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:1rem 1.25rem;margin-bottom:10px}
+.label{font-size:11px;font-weight:600;color:#64748B;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:6px}
+input,select,textarea{width:100%;border:1px solid #E2E8F0;border-radius:8px;padding:9px 12px;font-size:14px;color:#1E293B;font-family:Inter,sans-serif;background:#F8FAFC;outline:none;transition:border-color 0.15s}
+input:focus,select:focus,textarea:focus{border-color:#F97316}
+textarea{resize:none}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.why-connector{padding:3px 0 3px 22px;display:flex;align-items:center;gap:6px}
+.why-connector-line{width:2px;height:18px;background:#CBD5E1}
+.why-connector-label{font-size:11px;color:#94A3B8}
+.why-card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:1rem 1.25rem;border-left:3px solid #E2E8F0;transition:border-color 0.2s}
+.why-card.valid{border-left-color:#10B981}
+.why-card.active{border-left-color:#F97316}
+.why-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.why-badge{display:flex;align-items:center;gap:8px}
+.why-num{width:26px;height:26px;border-radius:50%;background:#0A1628;color:#F97316;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.why-title{font-size:13px;font-weight:500;color:#1E293B}
+.why-input-row{display:flex;gap:6px;align-items:flex-end}
+.why-input-row textarea{flex:1;min-height:52px}
+.ai-feedback{margin-top:8px;font-size:12px;padding:7px 10px;border-radius:8px;background:#F8FAFC;color:#475569;border-left:3px solid #F97316;display:none;line-height:1.5}
+.ai-feedback.show{display:block}
+.loader{display:none;align-items:center;gap:8px;padding:10px 14px;background:#F8FAFC;border-radius:8px;border:1px solid #E2E8F0;margin-top:10px;font-size:13px;color:#64748B}
+.loader.show{display:flex}
+.spinner{width:16px;height:16px;border:2px solid #E2E8F0;border-top-color:#F97316;border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn-row{display:flex;gap:8px;margin-top:1.25rem;flex-wrap:wrap}
+.btn-primary{padding:9px 18px;background:#F97316;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif}
+.btn-secondary{padding:9px 18px;background:#fff;color:#1E293B;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;cursor:pointer;font-family:Inter,sans-serif}
+.btn-ai{padding:9px 18px;background:#0A1628;color:#F97316;border:1px solid #0A1628;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif}
+.btn-danger{padding:9px 18px;background:#FEE2E2;color:#991B1B;border:1px solid #FECACA;border-radius:8px;font-size:13px;cursor:pointer;font-family:Inter,sans-serif}
+.chain-box{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:1.25rem;margin-bottom:10px}
+.toggle-row{display:flex;gap:6px;margin-bottom:12px}
+.toggle-btn{padding:6px 14px;border:1px solid #E2E8F0;border-radius:20px;font-size:12px;cursor:pointer;background:#F8FAFC;color:#64748B;font-family:Inter,sans-serif;transition:all 0.15s}
+.toggle-btn.active{background:#0A1628;color:#F97316;border-color:#0A1628}
+.chain-step{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:#F8FAFC;border-radius:8px;font-size:13px;color:#334155;margin-bottom:4px}
+.chain-step .sn{font-weight:600;color:#F97316;min-width:18px}
+.chain-arrow{text-align:center;font-size:11px;color:#94A3B8;padding:3px 0 3px 26px}
+.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.metric{background:#F8FAFC;border-radius:10px;padding:12px;text-align:center;border:1px solid #E2E8F0}
+.metric .val{font-size:24px;font-weight:600;color:#0A1628}
+.metric .lbl{font-size:11px;color:#64748B;margin-top:2px}
+.root-box{background:#F0FDF4;border-radius:10px;padding:12px 14px;border-left:3px solid #10B981;margin-bottom:10px}
+.root-box .rl{font-size:11px;font-weight:600;color:#065F46;margin-bottom:4px}
+.root-box .rt{font-size:13px;color:#1E293B}
+.ai-sum{background:#F8FAFC;border-radius:10px;padding:12px 14px;border-left:3px solid #F97316;font-size:13px;color:#334155;line-height:1.6;margin-top:8px}
+.hist-empty{text-align:center;padding:2rem;color:#94A3B8;font-size:13px}
+.hist-item{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:1rem 1.25rem;margin-bottom:8px;cursor:pointer;transition:border-color 0.15s}
+.hist-item:hover{border-color:#F97316}
+.hist-item-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.hist-item-title{font-size:13px;font-weight:500;color:#1E293B;flex:1}
+.hist-item-date{font-size:11px;color:#94A3B8;white-space:nowrap}
+.hist-item-meta{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+.hist-badge{font-size:11px;padding:2px 8px;border-radius:20px;background:#F1F5F9;color:#64748B}
+.hist-badge.green{background:#D1FAE5;color:#065F46}
+.hist-badge.orange{background:#FEF3C7;color:#92400E}
+.hist-detail{background:#F8FAFC;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:12px;color:#475569;line-height:1.6;display:none}
+.dict-hint{font-size:11px;color:#94A3B8;margin-top:4px;text-align:right}
+
+/* TELA DE LOGIN */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#F1F5F9}
+.login-card{background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:2rem;width:100%;max-width:380px;margin:1rem}
+.login-logo{width:52px;height:52px;background:#F97316;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;margin:0 auto 1rem}
+.login-title{text-align:center;font-size:18px;font-weight:600;color:#0A1628;margin-bottom:4px}
+.login-sub{text-align:center;font-size:13px;color:#64748B;margin-bottom:1.5rem}
+.login-label{font-size:12px;font-weight:600;color:#64748B;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:6px;margin-top:12px}
+.login-error{background:#FEE2E2;color:#991B1B;border-radius:8px;padding:8px 12px;font-size:13px;margin-top:10px;display:none}
+.btn-login{width:100%;padding:11px;background:#F97316;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;margin-top:1.25rem}
+.btn-login:hover{background:#EA6C10}
+.btn-login:disabled{background:#CBD5E1;cursor:not-allowed}
+</style>
+</head>
+<body>
+
+<!-- TELA DE LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">5P</div>
+    <div class="login-title">5 Porques</div>
+    <div class="login-sub">Analise de Causa Raiz com IA<br>Powered by Genba.ai</div>
+    <label class="login-label">E-mail</label>
+    <input type="email" id="loginEmail" placeholder="seu@email.com" autocomplete="email"/>
+    <label class="login-label">Senha</label>
+    <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password"/>
+    <div class="login-error" id="loginError"></div>
+    <button class="btn-login" id="btnLogin" onclick="doLogin()">Entrar</button>
+  </div>
+</div>
+
+<!-- APP PRINCIPAL (oculto até login) -->
+<div id="mainApp" style="display:none">
+<div class="app">
+<div class="header">
+  <div class="logo">5P</div>
+  <div>
+    <h1>5 Porques - Analise de Causa Raiz</h1>
+    <p>Powered by IA - Validacao logica em tempo real</p>
+  </div>
+  <div class="header-right">
+    <div class="user-info" id="userEmail"></div>
+    <button class="btn-logout" onclick="doLogout()">Sair</button>
+  </div>
+</div>
+<div class="tabs">
+  <button class="tab active" onclick="goPage(0,this)">Problema</button>
+  <button class="tab" onclick="goPage(1,this)">5 Porques</button>
+  <button class="tab" onclick="goPage(2,this)">Cadeia</button>
+  <button class="tab" onclick="goPage(3,this)">Resultado</button>
+  <button class="tab" onclick="goPage(4,this)">Historico</button>
+</div>
+
+<!-- PAGINA 0: PROBLEMA -->
+<div id="pg0" class="page active">
+  <div class="card">
+    <label class="label">Descricao do Problema</label>
+    <textarea id="problemDesc" rows="3" placeholder="Ex: Maquina de corte parou na linha 3 as 14h30..."></textarea>
+  </div>
+  <div class="card">
+    <label class="label">Local (Genba)</label>
+    <input type="text" id="location" placeholder="Ex: Linha 3 - Celula de Corte A"/>
+    <div class="grid2">
+      <div><label class="label" style="margin-top:10px">Area</label>
+        <select id="area">
+          <option>Producao</option><option>Manutencao</option><option>Qualidade</option>
+          <option>Logistica</option><option>Seguranca</option>
+        </select>
+      </div>
+      <div><label class="label" style="margin-top:10px">Responsavel</label>
+        <input type="text" id="responsible" placeholder="Nome do lider"/>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-primary" onclick="goPageDirect(1)">Iniciar Analise</button>
+  </div>
+</div>
+
+<!-- PAGINA 1: 5 PORQUES -->
+<div id="pg1" class="page">
+  <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:12px;color:#1E40AF">
+    Toque no campo de texto e use o microfone do teclado do seu celular para ditar as respostas por voz.
+  </div>
+  <div id="whyChain"></div>
+  <div class="loader" id="globalLoader"><div class="spinner"></div><span>Analisando com IA...</span></div>
+  <div class="btn-row">
+    <button class="btn-ai" onclick="analyzeAll()">Analisar com IA</button>
+    <button class="btn-secondary" onclick="goPageDirect(2)">Ver Cadeia</button>
+  </div>
+</div>
+
+<!-- PAGINA 2: CADEIA -->
+<div id="pg2" class="page">
+  <div class="chain-box">
+    <div class="toggle-row">
+      <button class="toggle-btn active" onclick="setChain('fwd',this)">Direta</button>
+      <button class="toggle-btn" onclick="setChain('rev',this)">Logica Inversa</button>
+    </div>
+    <div id="chainFwd"></div>
+    <div id="chainRev" style="display:none"></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-primary" onclick="goPageDirect(3)">Ver Resultado</button>
+    <button class="btn-secondary" onclick="goPageDirect(1)">Editar</button>
+  </div>
+</div>
+
+<!-- PAGINA 3: RESULTADO -->
+<div id="pg3" class="page">
+  <div class="card">
+    <div class="metric-grid">
+      <div class="metric"><div class="val" id="metWhys">0</div><div class="lbl">Porques respondidos</div></div>
+      <div class="metric"><div class="val" id="metScore">--</div><div class="lbl">Coerencia logica</div></div>
+      <div class="metric"><div class="val" id="metTime">--</div><div class="lbl">Duracao</div></div>
+    </div>
+    <div class="root-box">
+      <div class="rl">CAUSA RAIZ IDENTIFICADA</div>
+      <div class="rt" id="rootCauseText">--</div>
+    </div>
+    <div class="ai-sum" id="aiSummaryBox" style="display:none"></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-primary" onclick="saveAndExport()">Salvar e Exportar PDF</button>
+    <button class="btn-secondary" onclick="resetApp()">Nova Analise</button>
+  </div>
+</div>
+
+<!-- PAGINA 4: HISTORICO -->
+<div id="pg4" class="page">
+  <div class="card" style="margin-bottom:10px">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:13px;font-weight:600;color:#1E293B">Banco de Analises</span>
+      <span id="histCount" style="font-size:12px;color:#64748B"></span>
+    </div>
+  </div>
+  <div id="histList"></div>
+  <div class="btn-row" id="histActions" style="display:none">
+    <button class="btn-secondary" onclick="exportAllCSV()">Exportar CSV</button>
+    <button class="btn-danger" onclick="clearHistory()">Limpar Historico</button>
+  </div>
+</div>
+</div>
+</div>
+
+<script>
+// ── SUPABASE ──────────────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://pysscrbqnjluqomvrrzf.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_HydiIMyN5jxjCn0c2OjAHw_jh3bBRuh';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentSession = null;
+
+async function initAuth() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) {
+    currentSession = session;
+    showApp(session.user.email);
+  }
+}
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const btn = document.getElementById('btnLogin');
+  const errDiv = document.getElementById('loginError');
+  errDiv.style.display = 'none';
+  if (!email || !password) { showError('Preencha e-mail e senha.'); return; }
+  btn.disabled = true; btn.textContent = 'Entrando...';
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) {
+    showError('E-mail ou senha incorretos.');
+    btn.disabled = false; btn.textContent = 'Entrar';
+    return;
+  }
+  currentSession = data.session;
+  showApp(data.user.email);
+}
+
+function showError(msg) {
+  const e = document.getElementById('loginError');
+  e.textContent = msg; e.style.display = 'block';
+}
+
+function showApp(email) {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  document.getElementById('userEmail').textContent = email;
+  buildChain(); updateChainViews();
+}
+
+async function doLogout() {
+  await supabase.auth.signOut();
+  currentSession = null;
+  document.getElementById('mainApp').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPassword').value = '';
+}
+
+// ── VARIAVEIS ─────────────────────────────────────────────────────────────────
+const WHYS=['Por que o problema ocorreu?','Por que isso aconteceu?','Por que isso ocorreu?','Por que isso se deu?','Por que este fator existe?'];
+const PH=['Ex: O rolamento da maquina travou...','Ex: Ficou sem lubrificacao...','Ex: Plano de lubrificacao nao seguido...','Ex: Checklist nao disponivel na linha...','Ex: Sem padrao visual de documentos...'];
+const DB_KEY = '5porques_historico';
+
+let answers=['','','','',''],feedbacks=['','','','',''],startTime=Date.now(),lastAnalysis=null;
+
+// ── BUILD CHAIN ──────────────────────────────────────────────────────────────
+function buildChain(){
+  const chain=document.getElementById('whyChain');chain.innerHTML='';
+  for(let i=0;i<5;i++){
+    if(i>0){
+      const conn=document.createElement('div');conn.className='why-connector';
+      conn.innerHTML='<div class="why-connector-line"></div><span class="why-connector-label">portanto...</span>';
+      chain.appendChild(conn);
+    }
+    const val=answers[i].trim();
+    const cls=val.length>15?'valid':(val.length>0?'active':'');
+    const div=document.createElement('div');div.className='why-card '+cls;div.id='card'+i;
+    div.innerHTML=`
+      <div class="why-header">
+        <div class="why-badge">
+          <div class="why-num">${i+1}</div>
+          <span class="why-title">${WHYS[i]}</span>
+        </div>
+      </div>
+      <div class="why-input-row">
+        <textarea id="ans${i}" placeholder="${PH[i]}" oninput="onType(${i})">${answers[i]}</textarea>
+      </div>
+      <div class="dict-hint">Use o microfone do teclado para ditar por voz</div>
+      <div class="ai-feedback${feedbacks[i]?' show':''}" id="fb${i}">${feedbacks[i]||''}</div>`;
+    chain.appendChild(div);
+  }
+}
+
+function onType(idx){
+  answers[idx]=document.getElementById('ans'+idx).value;
+  const val=answers[idx].trim();
+  document.getElementById('card'+idx).className='why-card '+(val.length>15?'valid':(val.length>0?'active':''));
+}
+
+// ── IA ANALYSIS ──────────────────────────────────────────────────────────────
+async function analyzeAll(){
+  const filled=answers.filter(a=>a.trim().length>5);
+  if(filled.length<2){alert('Preencha ao menos 2 respostas para analisar.');return;}
+  const loader=document.getElementById('globalLoader');loader.className='loader show';
+  const problem=document.getElementById('problemDesc')?.value||'Problema nao descrito';
+  const chain=answers.map((a,i)=>a.trim()?`Porque ${i+1}: ${a.trim()}`:'').filter(Boolean).join('\n');
+  try{
+    const resp=await fetch('/api/chat',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization': `Bearer ${currentSession.access_token}`
+      },
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,
+        messages:[{role:'user',content:`Voce e especialista em Lean Manufacturing. Analise a cadeia de 5 Porques e retorne APENAS JSON sem markdown:\n\nProblema: ${problem}\n${chain}\n\nJSON:\n{"score":"XX%","feedbacks":["fb1","fb2","fb3","fb4","fb5"],"summary":"resumo","rootCause":"causa raiz"}`}]})});
+    if(resp.status===401){alert('Sessao expirada. Por favor, faca login novamente.');doLogout();return;}
+    const data=await resp.json();
+    const raw=data.content?.map(c=>c.text||'').join('').trim();
+    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    lastAnalysis=parsed;
+    if(parsed.feedbacks){
+      for(let i=0;i<5;i++){
+        feedbacks[i]=parsed.feedbacks[i]||'';
+        const fb=document.getElementById('fb'+i);
+        if(fb&&feedbacks[i]){fb.className='ai-feedback show';fb.innerHTML=feedbacks[i];}
+      }
+    }
+    loader.className='loader';
+    updateSummary(parsed);updateChainViews();
+  }catch(e){
+    loader.className='loader';
+    alert('Erro na analise. Verifique a conexao.');
+  }
+}
+
+// ── CHAIN VIEWS ──────────────────────────────────────────────────────────────
+function updateChainViews(){
+  const fwd=document.getElementById('chainFwd');
+  const rev=document.getElementById('chainRev');
+  const filled=answers.map((a,i)=>({n:i+1,a})).filter(x=>x.a.trim());
+  const prob=document.getElementById('problemDesc')?.value||'O problema ocorreu';
+  if(!filled.length){fwd.innerHTML='<p style="color:#94A3B8;font-size:13px">Preencha os porques primeiro.</p>';return;}
+  let fh=`<div class="chain-step"><span class="sn">P</span>${prob}</div>`;
+  filled.forEach(item=>{fh+=`<div class="chain-arrow">porque...</div><div class="chain-step"><span class="sn">${item.n}</span>${item.a.trim()}</div>`;});
+  fwd.innerHTML=fh;
+  let rh='<div style="font-size:11px;color:#94A3B8;margin-bottom:8px">Logica inversa: da causa raiz ao problema</div>';
+  [...filled].reverse().forEach(item=>{rh+=`<div class="chain-step"><span class="sn">${item.n}</span>${item.a.trim()}</div><div class="chain-arrow">portanto...</div>`;});
+  rh+=`<div class="chain-step"><span class="sn">P</span>${prob}</div>`;
+  rev.innerHTML=rh;
+}
+
+function setChain(mode,btn){
+  document.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('chainFwd').style.display=mode==='fwd'?'block':'none';
+  document.getElementById('chainRev').style.display=mode==='rev'?'block':'none';
+}
+
+// ── SUMMARY ──────────────────────────────────────────────────────────────────
+function updateSummary(parsed){
+  const filled=answers.filter(a=>a.trim().length>5);
+  document.getElementById('metWhys').textContent=filled.length;
+  document.getElementById('metScore').textContent=parsed?.score||'--';
+  const mins=Math.round((Date.now()-startTime)/60000);
+  document.getElementById('metTime').textContent=mins<1?'<1 min':mins+' min';
+  document.getElementById('rootCauseText').textContent=parsed?.rootCause||answers.filter(Boolean).pop()||'--';
+  const box=document.getElementById('aiSummaryBox');
+  if(parsed?.summary){box.style.display='block';box.textContent=parsed.summary;}
+}
+
+// ── BANCO DE DADOS LOCAL ──────────────────────────────────────────────────────
+function loadDB(){
+  try{return JSON.parse(localStorage.getItem(DB_KEY)||'[]');}
+  catch{return [];}
+}
+
+function saveDB(data){
+  localStorage.setItem(DB_KEY,JSON.stringify(data));
+}
+
+function saveAnalysis(){
+  if(!lastAnalysis) return false;
+  const prob=document.getElementById('problemDesc')?.value||'';
+  if(!prob.trim()) return false;
+  const record={
+    id: Date.now(),
+    date: new Date().toLocaleString('pt-BR'),
+    problem: prob,
+    location: document.getElementById('location')?.value||'',
+    area: document.getElementById('area')?.value||'',
+    responsible: document.getElementById('responsible')?.value||'',
+    answers: [...answers],
+    score: lastAnalysis.score||'--',
+    rootCause: lastAnalysis.rootCause||'',
+    summary: lastAnalysis.summary||'',
+    durationMin: Math.round((Date.now()-startTime)/60000)
+  };
+  const db=loadDB();
+  db.unshift(record);
+  saveDB(db);
+  return true;
+}
+
+function saveAndExport(){
+  const saved=saveAnalysis();
+  if(saved){
+    const msg=document.createElement('div');
+    msg.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#10B981;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-family:Inter,sans-serif;z-index:999';
+    msg.textContent='Analise salva no banco de dados!';
+    document.body.appendChild(msg);
+    setTimeout(()=>msg.remove(),2500);
+  }
+  window.print();
+}
+
+// ── HISTORICO ─────────────────────────────────────────────────────────────────
+function renderHistory(){
+  const db=loadDB();
+  const list=document.getElementById('histList');
+  const count=document.getElementById('histCount');
+  const actions=document.getElementById('histActions');
+  count.textContent=`${db.length} analise${db.length!==1?'s':''}`;
+  if(!db.length){
+    list.innerHTML='<div class="hist-empty">Nenhuma analise salva ainda.<br>Complete uma analise e clique em "Salvar e Exportar PDF".</div>';
+    actions.style.display='none';
+    return;
+  }
+  actions.style.display='flex';
+  list.innerHTML=db.map((r,idx)=>`
+    <div class="hist-item" onclick="toggleDetail(${idx})">
+      <div class="hist-item-header">
+        <span class="hist-item-title">${r.problem.substring(0,80)}${r.problem.length>80?'...':''}</span>
+        <span class="hist-item-date">${r.date}</span>
+      </div>
+      <div class="hist-item-meta">
+        <span class="hist-badge">${r.area}</span>
+        <span class="hist-badge">${r.location||'Local nao informado'}</span>
+        <span class="hist-badge">${r.responsible||'Resp. nao informado'}</span>
+        <span class="hist-badge ${parseFloat(r.score)>=70?'green':'orange'}">${r.score} coerencia</span>
+        <span class="hist-badge">${r.answers.filter(a=>a.trim()).length} porques</span>
+      </div>
+      <div class="hist-detail" id="detail${idx}">
+        <strong>Causa Raiz:</strong> ${r.rootCause||'--'}<br><br>
+        <strong>Resumo IA:</strong> ${r.summary||'--'}<br><br>
+        ${r.answers.map((a,i)=>a.trim()?`<strong>Porque ${i+1}:</strong> ${a}<br>`:'').filter(Boolean).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function toggleDetail(idx){
+  const d=document.getElementById('detail'+idx);
+  d.style.display=d.style.display==='block'?'none':'block';
+}
+
+function exportAllCSV(){
+  const db=loadDB();
+  if(!db.length){alert('Nenhuma analise para exportar.');return;}
+  const headers=['Data','Problema','Local','Area','Responsavel','Porque1','Porque2','Porque3','Porque4','Porque5','Causa Raiz','Score','Duracao(min)'];
+  const rows=db.map(r=>[
+    r.date,r.problem,r.location,r.area,r.responsible,
+    r.answers[0]||'',r.answers[1]||'',r.answers[2]||'',r.answers[3]||'',r.answers[4]||'',
+    r.rootCause,r.score,r.durationMin
+  ].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
+  const csv='\uFEFF'+[headers.join(','),...rows].join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;
+  a.download=`5porques_banco_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();URL.revokeObjectURL(url);
+}
+
+function clearHistory(){
+  if(!confirm('Tem certeza que deseja apagar todo o historico?')) return;
+  localStorage.removeItem(DB_KEY);
+  renderHistory();
+}
+
+// ── NAVEGACAO ─────────────────────────────────────────────────────────────────
+function goPage(idx,tab){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('pg'+idx).classList.add('active');
+  tab.classList.add('active');
+  if(idx===1) buildChain();
+  if(idx===2) updateChainViews();
+  if(idx===3) updateSummary(lastAnalysis);
+  if(idx===4) renderHistory();
+}
+
+function goPageDirect(idx){
+  const tabs=document.querySelectorAll('.tab');
+  goPage(idx,tabs[idx]);
+}
+
+function resetApp(){
+  answers=['','','','',''];feedbacks=['','','','',''];
+  startTime=Date.now();lastAnalysis=null;
+  document.getElementById('problemDesc').value='';
+  document.getElementById('location').value='';
+  document.getElementById('responsible').value='';
+  goPageDirect(0);
+}
+
+// ── INICIAR ───────────────────────────────────────────────────────────────────
+initAuth();
+</script>
+</body>
+</html>
