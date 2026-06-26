@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -251,7 +251,7 @@ async function doLogin() {
   btn.disabled = true; btn.textContent = 'Entrando...';
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
-    showError('E-mail ou senha incorretos.');
+    showError('Erro: ' + error.message);
     btn.disabled = false; btn.textContent = 'Entrar';
     return;
   }
