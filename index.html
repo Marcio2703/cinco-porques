@@ -7,7 +7,7 @@
 <title>5 Porques - Analise de Causa Raiz</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Inter,sans-serif;background:#F1F5F9;min-height:100vh;color:#1E293B}
@@ -229,12 +229,12 @@ textarea{resize:none}
 // ── SUPABASE ──────────────────────────────────────────────────────────────────
 const SUPABASE_URL = 'https://pysscrbqnjluqomvrrzf.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_HydiIMyN5jxjCn0c2OjAHw_jh3bBRuh';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentSession = null;
 
 async function initAuth() {
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await sbClient.auth.getSession();
   if (session) {
     currentSession = session;
     showApp(session.user.email);
@@ -249,7 +249,7 @@ async function doLogin() {
   errDiv.style.display = 'none';
   if (!email || !password) { showError('Preencha e-mail e senha.'); return; }
   btn.disabled = true; btn.textContent = 'Entrando...';
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
   if (error) {
     showError('E-mail ou senha incorretos.');
     btn.disabled = false; btn.textContent = 'Entrar';
@@ -272,7 +272,7 @@ function showApp(email) {
 }
 
 async function doLogout() {
-  await supabase.auth.signOut();
+  await sbClient.auth.signOut();
   currentSession = null;
   document.getElementById('mainApp').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
