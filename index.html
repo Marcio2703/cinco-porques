@@ -276,13 +276,31 @@ textarea{resize:none}
 // ── SUPABASE ──────────────────────────────────────────────────────────────────
 const SUPABASE_URL = 'https://pysscrbqnjluqomvrrzf.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5c3NjcmJxbmpsdXFvbXZycnpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MjQzMzksImV4cCI6MjA5ODAwMDMzOX0.CorVgzfzfnDHT880C8ZmNeDRAO18vw4K3VHA4UAJq9A';
-const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: false,
+    detectSessionInUrl: false
+  }
+});
 
 let currentSession = null;
 
 async function initAuth() {
-  const { data: { session } } = await sbClient.auth.getSession();
-  if (session) { currentSession = session; showApp(session.user.email); }
+  // Limpar qualquer sessão residual no storage
+  try { localStorage.removeItem('sb-pysscrbqnjluqomvrrzf-auth-token'); } catch(e){}
+
+  // Listener para mudanças de estado de autenticação
+  sbClient.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED' && !session) {
+      currentSession = null;
+      document.getElementById('mainApp').style.display = 'none';
+      document.getElementById('loginScreen').style.display = 'flex';
+    }
+    if (event === 'TOKEN_REFRESHED' && session) {
+      currentSession = session;
+    }
+  });
 }
 
 async function doLogin() {
@@ -294,8 +312,22 @@ async function doLogin() {
   if (!email || !password) { showError('Preencha e-mail e senha.'); return; }
   btn.disabled = true; btn.textContent = 'Entrando...';
   const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
-  if (error) { showError('E-mail ou senha incorretos.'); btn.disabled = false; btn.textContent = 'Entrar'; return; }
+  if (error) {
+    showError('Erro: ' + error.message);
+    btn.disabled = false; btn.textContent = 'Entrar'; return;
+  }
+  if (!data.session) {
+    showError('Sessao nao criada. Tente novamente.');
+    btn.disabled = false; btn.textContent = 'Entrar'; return;
+  }
   currentSession = data.session;
+  // Agendar aviso de expiração 5 min antes do token expirar
+  const expiresIn = (data.session.expires_in || 3600) - 300;
+  setTimeout(() => {
+    if (currentSession) {
+      alert('Sua sessao expirara em breve. Salve seu trabalho e faca login novamente se necessario.');
+    }
+  }, expiresIn * 1000);
   showApp(data.user.email);
 }
 
@@ -315,6 +347,7 @@ function showApp(email) {
 async function doLogout() {
   await sbClient.auth.signOut();
   currentSession = null;
+  try { localStorage.removeItem('sb-pysscrbqnjluqomvrrzf-auth-token'); } catch(e){}
   document.getElementById('mainApp').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('loginEmail').value = '';
@@ -627,7 +660,23 @@ function renderHistory() {
       causasPreenchidas = r.answers.filter(a => a.some(x => x.trim())).length;
       const best = r.lastAnalysis ? r.lastAnalysis.find(Boolean) : null;
       score = best?.score || '--';
-      detalhe = r.lastAnalysis ? r.lastAnalysis.map((a, c) => a ? `<strong>${c+1}ª Causa Raiz:</strong> ${a.rootCause}<br>` : '').join('') : '';
+      // Mostrar detalhes completos de cada causa: porquês + causa raiz + resumo
+      const labels = ['1ª Causa', '2ª Causa', '3ª Causa'];
+      detalhe = r.answers.map((ans, c) => {
+        const filledAns = ans.filter(a => a && a.trim());
+        if (!filledAns.length) return '';
+        const la = r.lastAnalysis && r.lastAnalysis[c];
+        let bloco = `<div style="margin-bottom:10px;padding:8px 10px;background:#F8FAFC;border-radius:8px;border-left:3px solid #F97316">`;
+        bloco += `<strong style="color:#0A1628">${labels[c]} mais Provavel</strong><br>`;
+        ans.forEach((a, i) => { if (a && a.trim()) bloco += `<strong>Porque ${i+1}:</strong> ${a}<br>`; });
+        if (la) {
+          bloco += `<span style="color:#065F46"><strong>Causa Raiz:</strong> ${la.rootCause}</span><br>`;
+          if (la.summary) bloco += `<span style="color:#475569;font-size:11px">${la.summary}</span><br>`;
+          bloco += `<span style="font-size:11px;color:#64748B">Score: ${la.score}</span>`;
+        }
+        bloco += `</div>`;
+        return bloco;
+      }).join('');
     } else {
       const ans = r.answers || [];
       causasPreenchidas = ans.filter(a => a && a.trim()).length;
