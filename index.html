@@ -412,14 +412,7 @@ async function analyzeAll() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentSession.access_token },
         body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1000,
-          messages: [{ role: 'user', content: 'Voce e especialista em Lean Manufacturing. Analise a cadeia de 5 Porques para a ' + (c+1) + 'a causa mais provavel e retorne APENAS JSON sem markdown:
-
-Problema: ' + problem + '
-Causa ' + (c+1) + ':
-' + chain + '
-
-JSON:
-{"score":"XX%","feedbacks":["fb1","fb2","fb3","fb4","fb5"],"summary":"resumo","rootCause":"causa raiz"}' }] })
+          messages: [{ role: 'user', content: 'Voce e especialista em Lean Manufacturing. Analise a cadeia de 5 Porques para a ' + (c+1) + 'a causa mais provavel e retorne APENAS JSON sem markdown:\n\nProblema: ' + problem + '\nCausa ' + (c+1) + ':\n' + chain + '\n\nJSON:\n{"score":"XX%","feedbacks":["fb1","fb2","fb3","fb4","fb5"],"summary":"resumo","rootCause":"causa raiz"}' }] })
       });
       if (resp.status === 401) { alert('Sessao expirada. Faca login novamente.'); doLogout(); return; }
       const data = await resp.json();
