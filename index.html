@@ -29,16 +29,12 @@ input,select,textarea{width:100%;border:1px solid #E2E8F0;border-radius:8px;padd
 input:focus,select:focus,textarea:focus{border-color:#F97316}
 textarea{resize:none}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-
-/* ── SELETOR DE CAUSA ─────────────────────────────────── */
 .causa-tabs{display:flex;gap:6px;margin-bottom:14px}
 .causa-tab{flex:1;padding:8px 6px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;text-align:center;border:2px solid #E2E8F0;background:#fff;color:#64748B;transition:all 0.15s;font-family:Inter,sans-serif}
 .causa-tab.active{border-color:#F97316;background:#FFF7ED;color:#F97316}
 .causa-tab.filled{border-color:#10B981;background:#F0FDF4;color:#065F46}
 .causa-tab.active.filled{border-color:#F97316;background:#FFF7ED;color:#F97316}
 .causa-label-top{font-size:11px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;padding:6px 10px;background:#F8FAFC;border-radius:6px;border-left:3px solid #F97316}
-
-/* ── PORQUES ──────────────────────────────────────────── */
 .why-connector{padding:3px 0 3px 22px;display:flex;align-items:center;gap:6px}
 .why-connector-line{width:2px;height:18px;background:#CBD5E1}
 .why-connector-label{font-size:11px;color:#94A3B8}
@@ -62,8 +58,6 @@ textarea{resize:none}
 .btn-secondary{padding:9px 18px;background:#fff;color:#1E293B;border:1px solid #E2E8F0;border-radius:8px;font-size:13px;cursor:pointer;font-family:Inter,sans-serif}
 .btn-ai{padding:9px 18px;background:#0A1628;color:#F97316;border:1px solid #0A1628;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif}
 .btn-danger{padding:9px 18px;background:#FEE2E2;color:#991B1B;border:1px solid #FECACA;border-radius:8px;font-size:13px;cursor:pointer;font-family:Inter,sans-serif}
-
-/* ── CADEIA ───────────────────────────────────────────── */
 .chain-box{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:1.25rem;margin-bottom:10px}
 .toggle-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
 .toggle-btn{padding:6px 14px;border:1px solid #E2E8F0;border-radius:20px;font-size:12px;cursor:pointer;background:#F8FAFC;color:#64748B;font-family:Inter,sans-serif;transition:all 0.15s}
@@ -71,9 +65,6 @@ textarea{resize:none}
 .chain-step{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:#F8FAFC;border-radius:8px;font-size:13px;color:#334155;margin-bottom:4px}
 .chain-step .sn{font-weight:600;color:#F97316;min-width:18px}
 .chain-arrow{text-align:center;font-size:11px;color:#94A3B8;padding:3px 0 3px 26px}
-.chain-causa-title{font-size:12px;font-weight:600;color:#0A1628;margin:12px 0 6px;padding:4px 10px;background:#EFF6FF;border-radius:6px}
-
-/* ── RESULTADO ────────────────────────────────────────── */
 .metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
 .metric{background:#F8FAFC;border-radius:10px;padding:12px;text-align:center;border:1px solid #E2E8F0}
 .metric .val{font-size:24px;font-weight:600;color:#0A1628}
@@ -87,8 +78,6 @@ textarea{resize:none}
 .causa-result-card .crv{font-size:12px;color:#1E293B}
 .causa-result-card.has-data{border-color:#10B981}
 .ai-sum{background:#F8FAFC;border-radius:10px;padding:12px 14px;border-left:3px solid #F97316;font-size:13px;color:#334155;line-height:1.6;margin-top:8px}
-
-/* ── HISTORICO ────────────────────────────────────────── */
 .hist-empty{text-align:center;padding:2rem;color:#94A3B8;font-size:13px}
 .hist-item{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:1rem 1.25rem;margin-bottom:8px;cursor:pointer;transition:border-color 0.15s}
 .hist-item:hover{border-color:#F97316}
@@ -101,8 +90,6 @@ textarea{resize:none}
 .hist-badge.orange{background:#FEF3C7;color:#92400E}
 .hist-detail{background:#F8FAFC;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:12px;color:#475569;line-height:1.6;display:none}
 .dict-hint{font-size:11px;color:#94A3B8;margin-top:4px;text-align:right}
-
-/* TELA DE LOGIN */
 #loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#F1F5F9}
 .login-card{background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:2rem;width:100%;max-width:380px;margin:1rem}
 .login-logo{width:52px;height:52px;background:#F97316;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;margin:0 auto 1rem}
@@ -116,8 +103,6 @@ textarea{resize:none}
 </style>
 </head>
 <body>
-
-<!-- TELA DE LOGIN -->
 <div id="loginScreen">
   <div class="login-card">
     <div class="login-logo">5P</div>
@@ -131,16 +116,11 @@ textarea{resize:none}
     <button class="btn-login" id="btnLogin" onclick="doLogin()">Entrar</button>
   </div>
 </div>
-
-<!-- APP PRINCIPAL -->
 <div id="mainApp" style="display:none">
 <div class="app">
 <div class="header">
   <div class="logo">5P</div>
-  <div>
-    <h1>5 Porques - Analise de Causa Raiz</h1>
-    <p>Powered by IA - Validacao logica em tempo real</p>
-  </div>
+  <div><h1>5 Porques - Analise de Causa Raiz</h1><p>Powered by IA</p></div>
   <div class="header-right">
     <div class="user-info" id="userEmail"></div>
     <button class="btn-logout" onclick="doLogout()">Sair</button>
@@ -153,8 +133,6 @@ textarea{resize:none}
   <button class="tab" onclick="goPage(3,this)">Resultado</button>
   <button class="tab" onclick="goPage(4,this)">Historico</button>
 </div>
-
-<!-- PG0: PROBLEMA -->
 <div id="pg0" class="page active">
   <div class="card">
     <label class="label">Descricao do Problema</label>
@@ -165,35 +143,24 @@ textarea{resize:none}
     <input type="text" id="location" placeholder="Ex: Linha 3 - Celula de Corte A"/>
     <div class="grid2">
       <div><label class="label" style="margin-top:10px">Area</label>
-        <select id="area">
-          <option>Producao</option><option>Manutencao</option><option>Qualidade</option>
-          <option>Logistica</option><option>Seguranca</option>
-        </select>
+        <select id="area"><option>Producao</option><option>Manutencao</option><option>Qualidade</option><option>Logistica</option><option>Seguranca</option></select>
       </div>
       <div><label class="label" style="margin-top:10px">Responsavel</label>
         <input type="text" id="responsible" placeholder="Nome do lider"/>
       </div>
     </div>
   </div>
-  <div class="btn-row">
-    <button class="btn-primary" onclick="goPageDirect(1)">Iniciar Analise</button>
-  </div>
+  <div class="btn-row"><button class="btn-primary" onclick="goPageDirect(1)">Iniciar Analise</button></div>
 </div>
-
-<!-- PG1: 5 PORQUES COM 3 COLUNAS DE CAUSAS -->
 <div id="pg1" class="page">
   <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:12px;color:#1E40AF">
     Analise ate 3 possiveis causas de forma independente. Selecione a causa, preencha os 5 Porques e analise com IA.
   </div>
-
-  <!-- Abas de causa -->
   <div class="causa-tabs">
     <button class="causa-tab active" id="ctab0" onclick="switchCausa(0)">1ª Causa mais Provavel</button>
     <button class="causa-tab" id="ctab1" onclick="switchCausa(1)">2ª Causa mais Provavel</button>
     <button class="causa-tab" id="ctab2" onclick="switchCausa(2)">3ª Causa mais Provavel</button>
   </div>
-
-  <!-- Paineis de causa (um por vez) -->
   <div id="causaPanel0" class="causa-panel">
     <div class="causa-label-top">1ª Causa mais Provavel — preencha os 5 Porques abaixo</div>
     <div id="whyChain0"></div>
@@ -206,15 +173,12 @@ textarea{resize:none}
     <div class="causa-label-top">3ª Causa mais Provavel — preencha os 5 Porques abaixo</div>
     <div id="whyChain2"></div>
   </div>
-
   <div class="loader" id="globalLoader"><div class="spinner"></div><span>Analisando com IA...</span></div>
   <div class="btn-row">
     <button class="btn-ai" onclick="analyzeAll()">Analisar com IA</button>
     <button class="btn-secondary" onclick="goPageDirect(2)">Ver Cadeia</button>
   </div>
 </div>
-
-<!-- PG2: CADEIA -->
 <div id="pg2" class="page">
   <div class="chain-box">
     <div class="toggle-row">
@@ -232,8 +196,6 @@ textarea{resize:none}
     <button class="btn-secondary" onclick="goPageDirect(1)">Editar</button>
   </div>
 </div>
-
-<!-- PG3: RESULTADO -->
 <div id="pg3" class="page">
   <div class="card">
     <div class="metric-grid">
@@ -241,7 +203,6 @@ textarea{resize:none}
       <div class="metric"><div class="val" id="metScore">--</div><div class="lbl">Coerencia logica</div></div>
       <div class="metric"><div class="val" id="metTime">--</div><div class="lbl">Duracao</div></div>
     </div>
-    <!-- Resultado por causa -->
     <div class="causa-result-grid" id="causaResultGrid"></div>
     <div class="root-box">
       <div class="rl">CAUSA RAIZ PRINCIPAL IDENTIFICADA</div>
@@ -254,8 +215,6 @@ textarea{resize:none}
     <button class="btn-secondary" onclick="resetApp()">Nova Analise</button>
   </div>
 </div>
-
-<!-- PG4: HISTORICO -->
 <div id="pg4" class="page">
   <div class="card" style="margin-bottom:10px">
     <div style="display:flex;align-items:center;justify-content:space-between">
@@ -271,35 +230,33 @@ textarea{resize:none}
 </div>
 </div>
 </div>
-
 <script>
-// ── SUPABASE ──────────────────────────────────────────────────────────────────
 const SUPABASE_URL = 'https://pysscrbqnjluqomvrrzf.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5c3NjcmJxbmpsdXFvbXZycnpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MjQzMzksImV4cCI6MjA5ODAwMDMzOX0.CorVgzfzfnDHT880C8ZmNeDRAO18vw4K3VHA4UAJq9A';
 const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth: {
-    autoRefreshToken: true,
-    persistSession: false,
-    detectSessionInUrl: false
-  }
+  auth: { autoRefreshToken: true, persistSession: false, detectSessionInUrl: false }
 });
-
+const DB_KEY = '5porques_historico';
+const WHYS = ['Por que o problema ocorreu?','Por que isso aconteceu?','Por que isso ocorreu?','Por que isso se deu?','Por que este fator existe?'];
+const PH = ['Ex: O rolamento da maquina travou...','Ex: Ficou sem lubrificacao...','Ex: Plano de lubrificacao nao seguido...','Ex: Checklist nao disponivel na linha...','Ex: Sem padrao visual de documentos...'];
+const NUM_CAUSAS = 3;
 let currentSession = null;
+let answers = [['','','','',''],['','','','',''],['','','','','']];
+let feedbacks = [['','','','',''],['','','','',''],['','','','','']];
+let lastAnalysis = [null,null,null];
+let currentCausa = 0, currentChainCausa = 0, chainMode = 'fwd';
+let startTime = Date.now();
 
+// ── AUTH ──────────────────────────────────────────────────────────────────────
 async function initAuth() {
-  // Limpar qualquer sessão residual no storage
   try { localStorage.removeItem('sb-pysscrbqnjluqomvrrzf-auth-token'); } catch(e){}
-
-  // Listener para mudanças de estado de autenticação
   sbClient.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED' && !session) {
+    if (event === 'SIGNED_OUT' || (event === 'TOKEN_REFRESHED' && !session)) {
       currentSession = null;
       document.getElementById('mainApp').style.display = 'none';
       document.getElementById('loginScreen').style.display = 'flex';
     }
-    if (event === 'TOKEN_REFRESHED' && session) {
-      currentSession = session;
-    }
+    if (event === 'TOKEN_REFRESHED' && session) currentSession = session;
   });
 }
 
@@ -307,34 +264,20 @@ async function doLogin() {
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
   const btn = document.getElementById('btnLogin');
-  const errDiv = document.getElementById('loginError');
-  errDiv.style.display = 'none';
+  document.getElementById('loginError').style.display = 'none';
   if (!email || !password) { showError('Preencha e-mail e senha.'); return; }
   btn.disabled = true; btn.textContent = 'Entrando...';
   const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
-  if (error) {
-    showError('Erro: ' + error.message);
-    btn.disabled = false; btn.textContent = 'Entrar'; return;
-  }
-  if (!data.session) {
-    showError('Sessao nao criada. Tente novamente.');
-    btn.disabled = false; btn.textContent = 'Entrar'; return;
-  }
+  if (error) { showError('E-mail ou senha incorretos.'); btn.disabled = false; btn.textContent = 'Entrar'; return; }
+  if (!data.session) { showError('Sessao nao criada. Tente novamente.'); btn.disabled = false; btn.textContent = 'Entrar'; return; }
   currentSession = data.session;
-  // Agendar aviso de expiração 5 min antes do token expirar
   const expiresIn = (data.session.expires_in || 3600) - 300;
-  setTimeout(() => {
-    if (currentSession) {
-      alert('Sua sessao expirara em breve. Salve seu trabalho e faca login novamente se necessario.');
-    }
-  }, expiresIn * 1000);
+  setTimeout(() => { if (currentSession) alert('Sua sessao expirara em breve. Salve seu trabalho.'); }, expiresIn * 1000);
+  await migrarLocalParaSupabase();
   showApp(data.user.email);
 }
 
-function showError(msg) {
-  const e = document.getElementById('loginError');
-  e.textContent = msg; e.style.display = 'block';
-}
+function showError(msg) { const e = document.getElementById('loginError'); e.textContent = msg; e.style.display = 'block'; }
 
 function showApp(email) {
   document.getElementById('loginScreen').style.display = 'none';
@@ -354,26 +297,42 @@ async function doLogout() {
   document.getElementById('loginPassword').value = '';
 }
 
-// ── VARIAVEIS — 3 causas independentes ───────────────────────────────────────
-const WHYS = ['Por que o problema ocorreu?','Por que isso aconteceu?','Por que isso ocorreu?','Por que isso se deu?','Por que este fator existe?'];
-const PH = ['Ex: O rolamento da maquina travou...','Ex: Ficou sem lubrificacao...','Ex: Plano de lubrificacao nao seguido...','Ex: Checklist nao disponivel na linha...','Ex: Sem padrao visual de documentos...'];
-const DB_KEY = '5porques_historico';
-const NUM_CAUSAS = 3;
+// ── MIGRACAO localStorage -> Supabase ─────────────────────────────────────────
+async function migrarLocalParaSupabase() {
+  try {
+    const local = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+    if (!local.length) return;
+    const userId = currentSession.user.id;
+    let migrados = 0;
+    for (const r of local) {
+      const { data: existe } = await sbClient.from('analises').select('id').eq('id', r.id).maybeSingle();
+      if (existe) continue;
+      const { error } = await sbClient.from('analises').insert({
+        id: r.id,
+        user_id: userId,
+        date: r.date || new Date().toLocaleString('pt-BR'),
+        problem: r.problem || '',
+        location: r.location || '',
+        area: r.area || '',
+        responsible: r.responsible || '',
+        answers: r.answers || [],
+        last_analysis: r.lastAnalysis || r.last_analysis || null,
+        duration_min: r.durationMin || r.duration_min || 0
+      });
+      if (!error) migrados++;
+    }
+    if (migrados > 0) {
+      localStorage.removeItem(DB_KEY);
+      console.log('Migracao: ' + migrados + ' registros enviados ao banco.');
+    }
+  } catch(e) { console.error('Erro migracao:', e); }
+}
 
-// answers[c][i] = resposta da causa c, pergunta i
-let answers = [['','','','',''], ['','','','',''], ['','','','','']];
-let feedbacks = [['','','','',''], ['','','','',''], ['','','','','']];
-let lastAnalysis = [null, null, null]; // análise por causa
-let currentCausa = 0;     // causa sendo editada
-let currentChainCausa = 0; // causa sendo visualizada na cadeia
-let chainMode = 'fwd';
-let startTime = Date.now();
-
-// ── INIT CHAINS — cria DOM das 3 colunas SEM recriar se já existir ───────────
+// ── CHAINS ────────────────────────────────────────────────────────────────────
 function initChains() {
   for (let c = 0; c < NUM_CAUSAS; c++) {
     const container = document.getElementById('whyChain' + c);
-    if (container.children.length > 0) continue; // já construído — não recriar
+    if (container.children.length > 0) continue;
     buildChainForCausa(c);
   }
 }
@@ -393,55 +352,32 @@ function buildChainForCausa(c) {
     const div = document.createElement('div');
     div.className = 'why-card ' + cls;
     div.id = 'card' + c + '_' + i;
-    div.innerHTML = `
-      <div class="why-header">
-        <div class="why-badge">
-          <div class="why-num">${i + 1}</div>
-          <span class="why-title">${WHYS[i]}</span>
-        </div>
-      </div>
-      <div class="why-input-row">
-        <textarea id="ans${c}_${i}" placeholder="${PH[i]}" oninput="onType(${c},${i})">${answers[c][i]}</textarea>
-      </div>
-      <div class="dict-hint">Use o microfone do teclado para ditar por voz</div>
-      <div class="ai-feedback${feedbacks[c][i] ? ' show' : ''}" id="fb${c}_${i}">${feedbacks[c][i] || ''}</div>`;
+    div.innerHTML = '<div class="why-header"><div class="why-badge"><div class="why-num">' + (i+1) + '</div><span class="why-title">' + WHYS[i] + '</span></div></div><div class="why-input-row"><textarea id="ans' + c + '_' + i + '" placeholder="' + PH[i] + '" oninput="onType(' + c + ',' + i + ')">' + answers[c][i] + '</textarea></div><div class="dict-hint">Use o microfone do teclado para ditar por voz</div><div class="ai-feedback' + (feedbacks[c][i] ? ' show' : '') + '" id="fb' + c + '_' + i + '">' + (feedbacks[c][i] || '') + '</div>';
     container.appendChild(div);
   }
   updateCausaTab(c);
 }
 
-// ── TROCAR CAUSA ATIVA ────────────────────────────────────────────────────────
 function switchCausa(c) {
-  // Salvar valores atuais antes de trocar (garante que não perde dados)
   syncAnswersFromDOM(currentCausa);
-
   currentCausa = c;
-
-  // Mostrar painel correto
   for (let i = 0; i < NUM_CAUSAS; i++) {
     document.getElementById('causaPanel' + i).style.display = i === c ? 'block' : 'none';
     document.getElementById('ctab' + i).classList.remove('active');
   }
   document.getElementById('ctab' + c).classList.add('active');
-
-  // Se o painel ainda não foi construído, construir agora
   const container = document.getElementById('whyChain' + c);
   if (container.children.length === 0) buildChainForCausa(c);
 }
 
-// ── SYNC — lê valores do DOM para o array answers (evita perda ao navegar) ───
 function syncAnswersFromDOM(c) {
   for (let i = 0; i < 5; i++) {
     const el = document.getElementById('ans' + c + '_' + i);
     if (el) answers[c][i] = el.value;
   }
 }
+function syncAllFromDOM() { for (let c = 0; c < NUM_CAUSAS; c++) syncAnswersFromDOM(c); }
 
-function syncAllFromDOM() {
-  for (let c = 0; c < NUM_CAUSAS; c++) syncAnswersFromDOM(c);
-}
-
-// ── ON TYPE ───────────────────────────────────────────────────────────────────
 function onType(c, i) {
   const el = document.getElementById('ans' + c + '_' + i);
   if (!el) return;
@@ -456,47 +392,41 @@ function updateCausaTab(c) {
   const filled = answers[c].filter(a => a.trim().length > 0).length;
   const tab = document.getElementById('ctab' + c);
   if (!tab) return;
-  if (filled > 0) tab.classList.add('filled');
-  else tab.classList.remove('filled');
+  if (filled > 0) tab.classList.add('filled'); else tab.classList.remove('filled');
 }
 
-// ── IA ANALYSIS ───────────────────────────────────────────────────────────────
+// ── IA ────────────────────────────────────────────────────────────────────────
 async function analyzeAll() {
   syncAllFromDOM();
   const problem = document.getElementById('problemDesc')?.value || 'Problema nao descrito';
-
-  // Verificar se há ao menos uma causa com 2+ respostas
   let temDados = false;
-  for (let c = 0; c < NUM_CAUSAS; c++) {
-    if (answers[c].filter(a => a.trim().length > 5).length >= 2) { temDados = true; break; }
-  }
+  for (let c = 0; c < NUM_CAUSAS; c++) { if (answers[c].filter(a => a.trim().length > 5).length >= 2) { temDados = true; break; } }
   if (!temDados) { alert('Preencha ao menos 2 respostas em alguma causa para analisar.'); return; }
-
   const loader = document.getElementById('globalLoader');
   loader.className = 'loader show';
-
-  // Analisar cada causa que tiver dados
   for (let c = 0; c < NUM_CAUSAS; c++) {
-    const filled = answers[c].filter(a => a.trim().length > 5);
-    if (filled.length < 2) continue;
-
-    const chain = answers[c].map((a, i) => a.trim() ? `Porque ${i + 1}: ${a.trim()}` : '').filter(Boolean).join('\n');
+    if (answers[c].filter(a => a.trim().length > 5).length < 2) continue;
+    const chain = answers[c].map((a, i) => a.trim() ? 'Porque ' + (i+1) + ': ' + a.trim() : '').filter(Boolean).join('
+');
     try {
       const resp = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentSession.access_token}` },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6', max_tokens: 1000,
-          messages: [{ role: 'user', content: `Voce e especialista em Lean Manufacturing. Analise a cadeia de 5 Porques para a ${c + 1}a causa mais provavel e retorne APENAS JSON sem markdown:\n\nProblema: ${problem}\nCausa ${c + 1}:\n${chain}\n\nJSON:\n{"score":"XX%","feedbacks":["fb1","fb2","fb3","fb4","fb5"],"summary":"resumo","rootCause":"causa raiz"}` }]
-        })
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentSession.access_token },
+        body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1000,
+          messages: [{ role: 'user', content: 'Voce e especialista em Lean Manufacturing. Analise a cadeia de 5 Porques para a ' + (c+1) + 'a causa mais provavel e retorne APENAS JSON sem markdown:
+
+Problema: ' + problem + '
+Causa ' + (c+1) + ':
+' + chain + '
+
+JSON:
+{"score":"XX%","feedbacks":["fb1","fb2","fb3","fb4","fb5"],"summary":"resumo","rootCause":"causa raiz"}' }] })
       });
       if (resp.status === 401) { alert('Sessao expirada. Faca login novamente.'); doLogout(); return; }
       const data = await resp.json();
       const raw = data.content?.map(d => d.text || '').join('').trim();
       const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
       lastAnalysis[c] = parsed;
-
-      // Aplicar feedbacks no DOM
       if (parsed.feedbacks) {
         for (let i = 0; i < 5; i++) {
           feedbacks[c][i] = parsed.feedbacks[i] || '';
@@ -504,43 +434,29 @@ async function analyzeAll() {
           if (fb && feedbacks[c][i]) { fb.className = 'ai-feedback show'; fb.innerHTML = feedbacks[c][i]; }
         }
       }
-    } catch (e) {
-      console.error('Erro causa ' + c, e);
-    }
+    } catch(e) { console.error('Erro causa ' + c, e); }
   }
-
   loader.className = 'loader';
   updateSummary();
   updateChainViews(currentChainCausa, chainMode);
 }
 
-// ── CHAIN VIEWS ───────────────────────────────────────────────────────────────
+// ── CADEIA ────────────────────────────────────────────────────────────────────
 function updateChainViews(c, mode) {
   syncAllFromDOM();
-  currentChainCausa = c;
-  chainMode = mode || 'fwd';
-
+  currentChainCausa = c; chainMode = mode || 'fwd';
   const fwd = document.getElementById('chainFwd');
   const rev = document.getElementById('chainRev');
-  const filled = answers[c].map((a, i) => ({ n: i + 1, a })).filter(x => x.a.trim());
+  const filled = answers[c].map((a, i) => ({ n: i+1, a })).filter(x => x.a.trim());
   const prob = document.getElementById('problemDesc')?.value || 'O problema ocorreu';
-
-  if (!filled.length) {
-    fwd.innerHTML = `<p style="color:#94A3B8;font-size:13px">Nenhuma resposta na ${c + 1}ª causa. Preencha os Porques primeiro.</p>`;
-    rev.innerHTML = '';
-    return;
-  }
-
-  let fh = `<div class="chain-step"><span class="sn">P</span>${prob}</div>`;
-  filled.forEach(item => { fh += `<div class="chain-arrow">porque...</div><div class="chain-step"><span class="sn">${item.n}</span>${item.a.trim()}</div>`; });
+  if (!filled.length) { fwd.innerHTML = '<p style="color:#94A3B8;font-size:13px">Nenhuma resposta na ' + (c+1) + 'a causa.</p>'; rev.innerHTML = ''; return; }
+  let fh = '<div class="chain-step"><span class="sn">P</span>' + prob + '</div>';
+  filled.forEach(item => { fh += '<div class="chain-arrow">porque...</div><div class="chain-step"><span class="sn">' + item.n + '</span>' + item.a.trim() + '</div>'; });
   fwd.innerHTML = fh;
-
-  let rh = '<div style="font-size:11px;color:#94A3B8;margin-bottom:8px">Logica inversa: da causa raiz ao problema</div>';
-  [...filled].reverse().forEach(item => { rh += `<div class="chain-step"><span class="sn">${item.n}</span>${item.a.trim()}</div><div class="chain-arrow">portanto...</div>`; });
-  rh += `<div class="chain-step"><span class="sn">P</span>${prob}</div>`;
+  let rh = '<div style="font-size:11px;color:#94A3B8;margin-bottom:8px">Logica inversa</div>';
+  [...filled].reverse().forEach(item => { rh += '<div class="chain-step"><span class="sn">' + item.n + '</span>' + item.a.trim() + '</div><div class="chain-arrow">portanto...</div>'; });
+  rh += '<div class="chain-step"><span class="sn">P</span>' + prob + '</div>';
   rev.innerHTML = rh;
-
-  // Mostrar/ocultar conforme modo
   fwd.style.display = chainMode === 'fwd' ? 'block' : 'none';
   rev.style.display = chainMode === 'rev' ? 'block' : 'none';
 }
@@ -555,8 +471,7 @@ function setChain(mode, btn) {
 
 function setChainCausa(c, btn) {
   document.querySelectorAll('.active-causa').forEach(b => { b.classList.remove('active-causa'); b.classList.remove('active'); });
-  btn.classList.add('active-causa');
-  btn.classList.add('active');
+  btn.classList.add('active-causa'); btn.classList.add('active');
   updateChainViews(c, chainMode);
 }
 
@@ -566,142 +481,129 @@ function updateSummary() {
   let totalFilled = 0;
   for (let c = 0; c < NUM_CAUSAS; c++) totalFilled += answers[c].filter(a => a.trim().length > 5).length;
   document.getElementById('metWhys').textContent = totalFilled;
-
-  // Score médio das causas analisadas
   const scores = lastAnalysis.filter(Boolean).map(a => parseFloat(a.score) || 0);
   const avgScore = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : null;
   document.getElementById('metScore').textContent = avgScore ? avgScore + '%' : '--';
-
   const mins = Math.round((Date.now() - startTime) / 60000);
   document.getElementById('metTime').textContent = mins < 1 ? '<1 min' : mins + ' min';
-
-  // Causa raiz principal — da causa com maior score
   let bestCausa = 0, bestScore = -1;
   for (let c = 0; c < NUM_CAUSAS; c++) {
-    if (lastAnalysis[c]) {
-      const s = parseFloat(lastAnalysis[c].score) || 0;
-      if (s > bestScore) { bestScore = s; bestCausa = c; }
-    }
+    if (lastAnalysis[c]) { const s = parseFloat(lastAnalysis[c].score) || 0; if (s > bestScore) { bestScore = s; bestCausa = c; } }
   }
   const best = lastAnalysis[bestCausa];
   document.getElementById('rootCauseText').textContent = best?.rootCause || answers[bestCausa].filter(Boolean).pop() || '--';
-
   const box = document.getElementById('aiSummaryBox');
   if (best?.summary) { box.style.display = 'block'; box.textContent = best.summary; }
-
-  // Grid de resultado por causa
   const grid = document.getElementById('causaResultGrid');
   grid.innerHTML = '';
-  const labels = ['1ª Causa', '2ª Causa', '3ª Causa'];
+  const labels = ['1a Causa', '2a Causa', '3a Causa'];
   for (let c = 0; c < NUM_CAUSAS; c++) {
     const a = lastAnalysis[c];
     const hasData = answers[c].filter(x => x.trim()).length > 0;
     const div = document.createElement('div');
     div.className = 'causa-result-card' + (a ? ' has-data' : '');
-    div.innerHTML = `<div class="crt">${labels[c]}</div><div class="crv">${a ? `<strong>${a.rootCause}</strong><br><span style="font-size:11px;color:#64748B">Score: ${a.score}</span>` : (hasData ? '<span style="color:#94A3B8">Aguardando analise</span>' : '<span style="color:#CBD5E1">Nao preenchida</span>')}</div>`;
+    div.innerHTML = '<div class="crt">' + labels[c] + '</div><div class="crv">' + (a ? '<strong>' + a.rootCause + '</strong><br><span style="font-size:11px;color:#64748B">Score: ' + a.score + '</span>' : (hasData ? '<span style="color:#94A3B8">Aguardando analise</span>' : '<span style="color:#CBD5E1">Nao preenchida</span>')) + '</div>';
     grid.appendChild(div);
   }
 }
 
-// ── DB LOCAL ──────────────────────────────────────────────────────────────────
-function loadDB() { try { return JSON.parse(localStorage.getItem(DB_KEY) || '[]'); } catch { return []; } }
-function saveDB(data) { localStorage.setItem(DB_KEY, JSON.stringify(data)); }
-
-function saveAnalysis() {
+// ── SALVAR NO SUPABASE ────────────────────────────────────────────────────────
+async function saveAnalysis() {
   syncAllFromDOM();
   const prob = document.getElementById('problemDesc')?.value || '';
   if (!prob.trim()) return false;
-  const hasAnalysis = lastAnalysis.some(Boolean);
-  if (!hasAnalysis) return false;
+  if (!lastAnalysis.some(Boolean)) return false;
   const record = {
     id: Date.now(),
+    user_id: currentSession.user.id,
     date: new Date().toLocaleString('pt-BR'),
     problem: prob,
     location: document.getElementById('location')?.value || '',
     area: document.getElementById('area')?.value || '',
     responsible: document.getElementById('responsible')?.value || '',
     answers: answers.map(a => [...a]),
-    lastAnalysis: [...lastAnalysis],
-    durationMin: Math.round((Date.now() - startTime) / 60000)
+    last_analysis: [...lastAnalysis],
+    duration_min: Math.round((Date.now() - startTime) / 60000)
   };
-  const db = loadDB(); db.unshift(record); saveDB(db);
-  return true;
+  try {
+    const { error } = await sbClient.from('analises').insert(record);
+    if (error) { console.error('Erro ao salvar:', error); return false; }
+    return true;
+  } catch(e) { console.error('Erro ao salvar:', e); return false; }
 }
 
-function saveAndExport() {
-  const saved = saveAnalysis();
-  if (saved) {
-    const msg = document.createElement('div');
-    msg.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#10B981;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-family:Inter,sans-serif;z-index:999';
-    msg.textContent = 'Analise salva!';
-    document.body.appendChild(msg);
-    setTimeout(() => msg.remove(), 2500);
-  }
+async function saveAndExport() {
+  const saved = await saveAnalysis();
+  const msg = document.createElement('div');
+  msg.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:8px;font-size:13px;font-family:Inter,sans-serif;z-index:999;color:#fff';
+  msg.style.background = saved ? '#10B981' : '#EF4444';
+  msg.textContent = saved ? 'Analise salva no banco!' : 'Erro ao salvar. Tente novamente.';
+  document.body.appendChild(msg);
+  setTimeout(() => msg.remove(), 2500);
   window.print();
 }
 
-// ── HISTORICO ─────────────────────────────────────────────────────────────────
-function renderHistory() {
-  const db = loadDB();
+// ── HISTORICO DO SUPABASE ─────────────────────────────────────────────────────
+async function renderHistory() {
   const list = document.getElementById('histList');
   const count = document.getElementById('histCount');
   const actions = document.getElementById('histActions');
-  count.textContent = `${db.length} analise${db.length !== 1 ? 's' : ''}`;
-  if (!db.length) {
-    list.innerHTML = '<div class="hist-empty">Nenhuma analise salva ainda.</div>';
-    actions.style.display = 'none'; return;
-  }
-  actions.style.display = 'flex';
-  list.innerHTML = db.map((r, idx) => {
-    // Compatibilidade: formato antigo (answers=string[]) e novo (answers=string[][])
-    const isNovoFormato = r.answers && Array.isArray(r.answers[0]);
-    let causasPreenchidas = 0, score = '--', detalhe = '';
-    if (isNovoFormato) {
-      causasPreenchidas = r.answers.filter(a => a.some(x => x.trim())).length;
-      const best = r.lastAnalysis ? r.lastAnalysis.find(Boolean) : null;
-      score = best?.score || '--';
-      // Mostrar detalhes completos de cada causa: porquês + causa raiz + resumo
-      const labels = ['1ª Causa', '2ª Causa', '3ª Causa'];
-      detalhe = r.answers.map((ans, c) => {
-        const filledAns = ans.filter(a => a && a.trim());
-        if (!filledAns.length) return '';
-        const la = r.lastAnalysis && r.lastAnalysis[c];
-        let bloco = `<div style="margin-bottom:10px;padding:8px 10px;background:#F8FAFC;border-radius:8px;border-left:3px solid #F97316">`;
-        bloco += `<strong style="color:#0A1628">${labels[c]} mais Provavel</strong><br>`;
-        ans.forEach((a, i) => { if (a && a.trim()) bloco += `<strong>Porque ${i+1}:</strong> ${a}<br>`; });
-        if (la) {
-          bloco += `<span style="color:#065F46"><strong>Causa Raiz:</strong> ${la.rootCause}</span><br>`;
-          if (la.summary) bloco += `<span style="color:#475569;font-size:11px">${la.summary}</span><br>`;
-          bloco += `<span style="font-size:11px;color:#64748B">Score: ${la.score}</span>`;
-        }
-        bloco += `</div>`;
-        return bloco;
-      }).join('');
-    } else {
-      const ans = r.answers || [];
-      causasPreenchidas = ans.filter(a => a && a.trim()).length;
-      const la = r.lastAnalysis;
-      score = (la && !Array.isArray(la)) ? (la.score || '--') : (r.score || '--');
-      const rc = (la && !Array.isArray(la)) ? la.rootCause : (r.rootCause || '');
-      const sm = (la && !Array.isArray(la)) ? la.summary : (r.summary || '');
-      detalhe = (rc ? `<strong>Causa Raiz:</strong> ${rc}<br><br>` : '') + (sm ? `<strong>Resumo IA:</strong> ${sm}<br><br>` : '') + ans.map((a,i) => a&&a.trim() ? `<strong>Porque ${i+1}:</strong> ${a}<br>` : '').filter(Boolean).join('');
+  list.innerHTML = '<div class="hist-empty">Carregando...</div>';
+
+  try {
+    const { data: db, error } = await sbClient
+      .from('analises')
+      .select('*')
+      .eq('user_id', currentSession.user.id)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    count.textContent = (db.length) + ' analise' + (db.length !== 1 ? 's' : '');
+    if (!db.length) {
+      list.innerHTML = '<div class="hist-empty">Nenhuma analise salva ainda.</div>';
+      actions.style.display = 'none'; return;
     }
-    return `
-    <div class="hist-item" onclick="toggleDetail(${idx})">
-      <div class="hist-item-header">
-        <span class="hist-item-title">${r.problem.substring(0, 80)}${r.problem.length > 80 ? '...' : ''}</span>
-        <span class="hist-item-date">${r.date}</span>
-      </div>
-      <div class="hist-item-meta">
-        <span class="hist-badge">${r.area || ''}</span>
-        <span class="hist-badge">${r.location || 'Local nao informado'}</span>
-        <span class="hist-badge">${r.responsible || 'Resp. nao informado'}</span>
-        <span class="hist-badge ${parseFloat(score) >= 70 ? 'green' : 'orange'}">${score} coerencia</span>
-        <span class="hist-badge">${isNovoFormato ? causasPreenchidas+' causa(s)' : causasPreenchidas+' porques'}</span>
-      </div>
-      <div class="hist-detail" id="detail${idx}">${detalhe}</div>
-    </div>`;
-  }).join('');
+    actions.style.display = 'flex';
+    list.innerHTML = db.map((r, idx) => {
+      const ans = r.answers || [];
+      const la = r.last_analysis || r.lastAnalysis;
+      const isNovoFormato = ans.length > 0 && Array.isArray(ans[0]);
+      let causasPreenchidas = 0, score = '--', detalhe = '';
+      if (isNovoFormato) {
+        causasPreenchidas = ans.filter(a => a.some(x => x.trim())).length;
+        const best = Array.isArray(la) ? la.find(Boolean) : la;
+        score = best?.score || '--';
+        const labels = ['1a Causa', '2a Causa', '3a Causa'];
+        detalhe = ans.map((ansC, c) => {
+          const filledAns = ansC.filter(a => a && a.trim());
+          if (!filledAns.length) return '';
+          const laC = Array.isArray(la) ? la[c] : null;
+          let bloco = '<div style="margin-bottom:10px;padding:8px 10px;background:#F8FAFC;border-radius:8px;border-left:3px solid #F97316">';
+          bloco += '<strong style="color:#0A1628">' + labels[c] + ' mais Provavel</strong><br>';
+          ansC.forEach((a, i) => { if (a && a.trim()) bloco += '<strong>Porque ' + (i+1) + ':</strong> ' + a + '<br>'; });
+          if (laC) {
+            bloco += '<span style="color:#065F46"><strong>Causa Raiz:</strong> ' + laC.rootCause + '</span><br>';
+            if (laC.summary) bloco += '<span style="color:#475569;font-size:11px">' + laC.summary + '</span><br>';
+            bloco += '<span style="font-size:11px;color:#64748B">Score: ' + laC.score + '</span>';
+          }
+          bloco += '</div>';
+          return bloco;
+        }).join('');
+      } else {
+        causasPreenchidas = ans.filter(a => a && a.trim()).length;
+        const laObj = (la && !Array.isArray(la)) ? la : null;
+        score = laObj?.score || r.score || '--';
+        const rc = laObj?.rootCause || r.rootCause || '';
+        const sm = laObj?.summary || r.summary || '';
+        detalhe = (rc ? '<strong>Causa Raiz:</strong> ' + rc + '<br><br>' : '') + (sm ? '<strong>Resumo IA:</strong> ' + sm + '<br><br>' : '') + ans.map((a, i) => a && a.trim() ? '<strong>Porque ' + (i+1) + ':</strong> ' + a + '<br>' : '').filter(Boolean).join('');
+      }
+      return '<div class="hist-item" onclick="toggleDetail(' + idx + ')"><div class="hist-item-header"><span class="hist-item-title">' + r.problem.substring(0,80) + (r.problem.length > 80 ? '...' : '') + '</span><span class="hist-item-date">' + r.date + '</span></div><div class="hist-item-meta"><span class="hist-badge">' + (r.area||'') + '</span><span class="hist-badge">' + (r.location||'Local nao informado') + '</span><span class="hist-badge">' + (r.responsible||'Resp. nao informado') + '</span><span class="hist-badge ' + (parseFloat(score) >= 70 ? 'green' : 'orange') + '">' + score + ' coerencia</span><span class="hist-badge">' + (isNovoFormato ? causasPreenchidas+' causa(s)' : causasPreenchidas+' porques') + '</span></div><div class="hist-detail" id="detail' + idx + '">' + detalhe + '</div></div>';
+    }).join('');
+  } catch(e) {
+    list.innerHTML = '<div class="hist-empty">Erro ao carregar historico.</div>';
+    console.error(e);
+  }
 }
 
 function toggleDetail(idx) {
@@ -709,41 +611,39 @@ function toggleDetail(idx) {
   d.style.display = d.style.display === 'block' ? 'none' : 'block';
 }
 
-function exportAllCSV() {
-  const db = loadDB();
-  if (!db.length) { alert('Nenhuma analise para exportar.'); return; }
+async function exportAllCSV() {
+  const { data: db } = await sbClient.from('analises').select('*').eq('user_id', currentSession.user.id).order('created_at', { ascending: false });
+  if (!db || !db.length) { alert('Nenhuma analise para exportar.'); return; }
   const headers = ['Data','Problema','Local','Area','Responsavel','C1-Causa Raiz','C1-Score','C2-Causa Raiz','C2-Score','C3-Causa Raiz','C3-Score','Duracao(min)'];
   const rows = db.map(r => {
-    const la = r.lastAnalysis || [null,null,null];
-    return [
-      r.date, r.problem, r.location, r.area, r.responsible,
-      la[0]?.rootCause||'', la[0]?.score||'',
-      la[1]?.rootCause||'', la[1]?.score||'',
-      la[2]?.rootCause||'', la[2]?.score||'',
-      r.durationMin
-    ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(',');
+    const la = r.last_analysis || [];
+    return [r.date, r.problem, r.location, r.area, r.responsible,
+      la[0]?.rootCause||'', la[0]?.score||'', la[1]?.rootCause||'', la[1]?.score||'', la[2]?.rootCause||'', la[2]?.score||'', r.duration_min
+    ].map(v => '"' + String(v||'').replace(/"/g,'""') + '"').join(',');
   });
-  const csv = '\uFEFF' + [headers.join(','), ...rows].join('\n');
+  const csv = '﻿' + [headers.join(','), ...rows].join('
+');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a'); a.href = url;
-  a.download = `5porques_banco_${new Date().toISOString().slice(0, 10)}.csv`;
+  a.download = '5porques_banco_' + new Date().toISOString().slice(0,10) + '.csv';
   a.click(); URL.revokeObjectURL(url);
 }
 
-function clearHistory() {
+async function clearHistory() {
   if (!confirm('Tem certeza que deseja apagar todo o historico?')) return;
-  localStorage.removeItem(DB_KEY); renderHistory();
+  await sbClient.from('analises').delete().eq('user_id', currentSession.user.id);
+  renderHistory();
 }
 
 // ── NAVEGACAO ─────────────────────────────────────────────────────────────────
 function goPage(idx, tab) {
-  syncAllFromDOM(); // CORREÇÃO BUG: salvar antes de trocar de página
+  syncAllFromDOM();
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById('pg' + idx).classList.add('active');
   tab.classList.add('active');
-  if (idx === 1) initChains(); // não reconstrói se já existir
+  if (idx === 1) initChains();
   if (idx === 2) updateChainViews(currentChainCausa, chainMode);
   if (idx === 3) updateSummary();
   if (idx === 4) renderHistory();
@@ -755,25 +655,18 @@ function goPageDirect(idx) {
 }
 
 function resetApp() {
-  answers = [['','','','',''], ['','','','',''], ['','','','','']];
-  feedbacks = [['','','','',''], ['','','','',''], ['','','','','']];
-  lastAnalysis = [null, null, null];
-  currentCausa = 0;
-  currentChainCausa = 0;
-  chainMode = 'fwd';
+  answers = [['','','','',''],['','','','',''],['','','','','']];
+  feedbacks = [['','','','',''],['','','','',''],['','','','','']];
+  lastAnalysis = [null,null,null];
+  currentCausa = 0; currentChainCausa = 0; chainMode = 'fwd';
   startTime = Date.now();
   document.getElementById('problemDesc').value = '';
   document.getElementById('location').value = '';
   document.getElementById('responsible').value = '';
-  // Reconstruir chains do zero
-  for (let c = 0; c < NUM_CAUSAS; c++) {
-    const container = document.getElementById('whyChain' + c);
-    container.innerHTML = '';
-  }
+  for (let c = 0; c < NUM_CAUSAS; c++) document.getElementById('whyChain' + c).innerHTML = '';
   goPageDirect(0);
 }
 
-// ── INICIAR ───────────────────────────────────────────────────────────────────
 initAuth();
 </script>
 </body>
