@@ -90,6 +90,32 @@ textarea{resize:none}
 .hist-badge.orange{background:#FEF3C7;color:#92400E}
 .hist-detail{background:#F8FAFC;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:12px;color:#475569;line-height:1.6;display:none}
 .dict-hint{font-size:11px;color:#94A3B8;margin-top:4px;text-align:right}
+/* ── TRAVAS DO RIGOR 5 PORQUES ────────────────────────────────────────────── */
+.trava-card{background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:1rem 1.25rem;margin-bottom:10px}
+.trava-q{font-size:13px;color:#334155;margin-bottom:2px}
+.triagem-warn{margin-top:10px;font-size:12px;padding:8px 12px;border-radius:8px;line-height:1.5}
+.triagem-warn.alert{background:#FEF3C7;color:#92400E;border-left:3px solid #D97706}
+.triagem-warn.info{background:#EFF6FF;color:#1E40AF;border-left:3px solid #3B82F6}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.seg-btn{padding:7px 14px;border:1px solid #E2E8F0;border-radius:20px;font-size:12px;cursor:pointer;background:#F8FAFC;color:#64748B;font-family:Inter,sans-serif;transition:all 0.15s}
+.seg-btn.active{background:#0A1628;color:#F97316;border-color:#0A1628}
+.escada{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.escada-btn{text-align:left;width:100%;padding:9px 12px;border:1px solid #E2E8F0;border-radius:8px;background:#F8FAFC;cursor:pointer;font-family:Inter,sans-serif;transition:all 0.15s}
+.escada-btn.active{border-color:#F97316;background:#FFF7ED}
+.escada-btn .et{font-size:13px;font-weight:600;color:#1E293B}
+.escada-btn.active .et{color:#F97316}
+.escada-btn .ed{font-size:11px;color:#64748B;margin-top:2px}
+.meta-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.meta-label{font-size:10px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:0.04em;width:100%;margin-bottom:2px}
+.chip{padding:4px 11px;border-radius:14px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid transparent;background:#F1F5F9;color:#64748B;font-family:Inter,sans-serif;transition:all 0.15s}
+.chip.active[data-t="fato"]{background:#DCFCE7;color:#15803D;border-color:#16A34A}
+.chip.active[data-t="hipotese"]{background:#FEF3C7;color:#B45309;border-color:#D97706}
+.chip.active[data-t="opiniao"]{background:#FEE2E2;color:#B91C1C;border-color:#DC2626}
+.chip.active[data-t="inferencia"]{background:#DBEAFE;color:#1D4ED8;border-color:#2563EB}
+.evid-input{margin-top:6px}
+.evid-input textarea{min-height:38px;font-size:12px}
+.meta-alert{margin-top:6px;font-size:11px;padding:6px 9px;border-radius:6px;background:#FEF3C7;color:#92400E;border-left:3px solid #D97706;display:none;line-height:1.5}
+.meta-alert.show{display:block}
 #loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#F1F5F9}
 .login-card{background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:2rem;width:100%;max-width:380px;margin:1rem}
 .login-logo{width:52px;height:52px;background:#F97316;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;margin:0 auto 1rem}
@@ -150,6 +176,18 @@ textarea{resize:none}
       </div>
     </div>
   </div>
+  <div class="trava-card">
+    <label class="label">Triagem — antes de abrir os 5 Porques</label>
+    <div class="trava-q">Voce foi ao Gemba ver a condicao com os proprios olhos?</div>
+    <div class="seg">
+      <button class="seg-btn" id="gembaSim" onclick="setGemba(true)">Sim, fui ver</button>
+      <button class="seg-btn" id="gembaNao" onclick="setGemba(false)">Ainda nao</button>
+    </div>
+    <div class="triagem-warn alert" id="gembaWarn" style="display:none">Va ver no Gemba antes de levantar hipoteses. O sistema deve aproximar o lider do processo, nunca dar desculpa para analisar de longe (Genchi Genbutsu).</div>
+    <div class="trava-q" style="margin-top:14px">Que tratamento este problema pede?</div>
+    <div class="escada" id="escada"></div>
+    <div class="triagem-warn info" id="tipoWarn" style="display:none"></div>
+  </div>
   <div class="btn-row"><button class="btn-primary" onclick="goPageDirect(1)">Iniciar Analise</button></div>
 </div>
 <div id="pg1" class="page">
@@ -209,6 +247,17 @@ textarea{resize:none}
       <div class="rt" id="rootCauseText">--</div>
     </div>
     <div class="ai-sum" id="aiSummaryBox" style="display:none"></div>
+    <div class="trava-card" style="margin-top:12px;margin-bottom:0">
+      <label class="label">Nivel da causa raiz e governabilidade</label>
+      <div class="meta-label" style="margin-bottom:4px">Em que nivel esta a causa raiz?</div>
+      <div class="seg" id="niveis"></div>
+      <div class="meta-row" style="margin-top:12px">
+        <span class="meta-label">Esta causa esta...</span>
+        <button class="seg-btn" id="govDentro" onclick="setGov('dentro_alcada')">Dentro da minha alcada</button>
+        <button class="seg-btn" id="govEscalar" onclick="setGov('escalar')">Precisa escalar</button>
+      </div>
+      <div class="triagem-warn alert" id="govWarn" style="display:none">Chegar a N4/N5 nao encerra a analise local: escale o sistemico via catchball E registre a contramedida controlavel dentro da alcada desta equipe. Causa sistemica nao e bengala para a inacao local.</div>
+    </div>
   </div>
   <div class="btn-row">
     <button class="btn-primary" onclick="saveAndExport()">Salvar e Exportar PDF</button>
@@ -240,12 +289,45 @@ const DB_KEY = '5porques_historico';
 const WHYS = ['Por que o problema ocorreu?','Por que isso aconteceu?','Por que isso ocorreu?','Por que isso se deu?','Por que este fator existe?'];
 const PH = ['Ex: O rolamento da maquina travou...','Ex: Ficou sem lubrificacao...','Ex: Plano de lubrificacao nao seguido...','Ex: Checklist nao disponivel na linha...','Ex: Sem padrao visual de documentos...'];
 const NUM_CAUSAS = 3;
+
+// ── CONSTANTES DAS TRAVAS (rigor 5 Porques) ───────────────────────────────────
+const TRIAGEM_TIPOS = [
+  { key: 'ver_agir',  label: 'Ver e Agir',           dica: 'Condicao e solucao conhecidas, seguras, baixa alcada. NAO abra 5 Porques.' },
+  { key: 'kaizen',    label: 'Melhoria Especifica',  dica: 'Oportunidade de melhoria conhecida. Propor, testar, padronizar.' },
+  { key: '5porques',  label: '5 Porques',            dica: 'Causa desconhecida, recorrencia ou correcao simples nao elimina.' },
+  { key: 'ishikawa',  label: 'Ishikawa (4M/6M)',     dica: 'Multiplas familias causais / maior complexidade.' },
+  { key: 'a3',        label: 'A3',                    dica: 'Relevante, transversal, recorrente, com KPI/cliente/estrategia.' },
+];
+const TIPO_PORQUE = [
+  { key: 'fato',       label: 'Fato' },
+  { key: 'hipotese',   label: 'Hipotese' },
+  { key: 'opiniao',    label: 'Opiniao' },
+  { key: 'inferencia', label: 'Inferencia' },
+];
+const NIVEIS = [
+  { key: 'N1', label: 'N1 — Fisica/imediata' },
+  { key: 'N2', label: 'N2 — Processo/metodo' },
+  { key: 'N3', label: 'N3 — Gestao da area' },
+  { key: 'N4', label: 'N4 — Interfuncional' },
+  { key: 'N5', label: 'N5 — Sistema de gestao' },
+];
+const SENSEI_PROMPT = 'Voce e o Asakai Sensei — consultor Lean digital especialista em Sistema Toyota de Producao, gestao da rotina e solucao estruturada de problemas (5 Porques, Ishikawa, A3). Analise a cadeia de 5 Porques com rigor de sensei: ensine e provoque, nunca entregue a resposta pronta nem resolva pelo usuario.\n'
++ 'EVIDENCIA E ANTI-BAJULACAO: nunca aceite a narrativa causal do usuario so porque ele afirmou. A cada porque separe FATO de HIPOTESE, OPINIAO e INFERENCIA; uma hipotese precisa ser verificada antes de virar o proximo elo. Teste sempre: "se eliminarmos esta causa, o efeito deveria sumir ou reduzir?". Aponte saltos causais (peca o elo intermediario), culpabilizacao, terceirizacao e solucao prematura.\n'
++ 'ERRO HUMANO nunca e causa final: traga o papel da lideranca em prevenir, detectar e desenvolver competencia, e classifique o mecanismo — Skill (rotina automatica -> deslize, ergonomia, poka-yoke), Rule (regra conhecida -> existencia/clareza/disponibilidade da regra), Knowledge (situacao nova -> informacao, suporte, tempo, escalonamento). Nao vire caca a culpados.\n'
++ 'TREINAMENTO nao e contramedida universal: so aceite com evidencia de gap real de competencia (existia padrao claro, atualizado e praticavel? a pessoa foi capacitada e demonstrou competencia? a condicao do erro era a treinada?). Diferencie treinar de capacitar.\n'
++ 'PROPORCIONALIDADE: nao use canhao para matar mosca; profundidade nao e qualidade. GOVERNABILIDADE: se a causa for sistemica (N4/N5), escale via catchball E ainda busque a contramedida controlavel local — causa sistemica nao justifica inacao local. CONTRAMEDIDA e experimento: declare o resultado esperado antes de agir.';
+
 let currentSession = null;
 let answers = [['','','','',''],['','','','',''],['','','','','']];
 let feedbacks = [['','','','',''],['','','','',''],['','','','','']];
 let lastAnalysis = [null,null,null];
 let currentCausa = 0, currentChainCausa = 0, chainMode = 'fwd';
 let startTime = Date.now();
+
+// ── ESTADO DAS TRAVAS ──────────────────────────────────────────────────────────
+function meta5() { return [0,1,2,3,4].map(() => ({ tipo: '', evidencia: '' })); }
+let analise = { gemba: null, tipo: '', nivel: '', governabilidade: '' };
+let porquesMeta = [meta5(), meta5(), meta5()];
 
 // ── AUTH ──────────────────────────────────────────────────────────────────────
 async function initAuth() {
@@ -284,6 +366,8 @@ function showApp(email) {
   document.getElementById('mainApp').style.display = 'block';
   document.getElementById('userEmail').textContent = email;
   initChains();
+  renderEscada();
+  renderNiveis();
   updateChainViews(currentChainCausa, 'fwd');
 }
 
@@ -328,6 +412,83 @@ async function migrarLocalParaSupabase() {
   } catch(e) { console.error('Erro migracao:', e); }
 }
 
+// ── TRAVA 1: TRIAGEM (Gemba + escada) ─────────────────────────────────────────
+function renderEscada() {
+  const el = document.getElementById('escada');
+  if (!el) return;
+  el.innerHTML = TRIAGEM_TIPOS.map(t =>
+    '<button class="escada-btn' + (analise.tipo === t.key ? ' active' : '') + '" onclick="setTriagemTipo(\'' + t.key + '\')">'
+    + '<div class="et">' + t.label + '</div><div class="ed">' + t.dica + '</div></button>'
+  ).join('');
+}
+
+function setGemba(v) {
+  analise.gemba = v;
+  document.getElementById('gembaSim').classList.toggle('active', v === true);
+  document.getElementById('gembaNao').classList.toggle('active', v === false);
+  document.getElementById('gembaWarn').style.display = (v === false) ? 'block' : 'none';
+}
+
+function setTriagemTipo(k) {
+  analise.tipo = k;
+  renderEscada();
+  const w = document.getElementById('tipoWarn');
+  if (k === 'ver_agir' || k === 'kaizen') {
+    const lbl = (TRIAGEM_TIPOS.find(t => t.key === k) || {}).label || '';
+    w.style.display = 'block';
+    w.textContent = 'Para "' + lbl + '" os 5 Porques podem ser desproporcionais — canhao para matar mosca. Aja e padronize; so abra investigacao causal se a causa for desconhecida ou houver recorrencia.';
+  } else {
+    w.style.display = 'none';
+  }
+}
+
+// ── TRAVA 3: NIVEL + GOVERNABILIDADE ──────────────────────────────────────────
+function renderNiveis() {
+  const el = document.getElementById('niveis');
+  if (!el) return;
+  el.innerHTML = NIVEIS.map(n =>
+    '<button class="seg-btn' + (analise.nivel === n.key ? ' active' : '') + '" onclick="setNivel(\'' + n.key + '\')">' + n.label + '</button>'
+  ).join('');
+}
+
+function setNivel(k) { analise.nivel = k; renderNiveis(); }
+
+function setGov(k) {
+  analise.governabilidade = k;
+  document.getElementById('govDentro').classList.toggle('active', k === 'dentro_alcada');
+  document.getElementById('govEscalar').classList.toggle('active', k === 'escalar');
+  document.getElementById('govWarn').style.display = (k === 'escalar') ? 'block' : 'none';
+}
+
+function resetTravasUI() {
+  ['gembaSim','gembaNao','govDentro','govEscalar'].forEach(id => { const e = document.getElementById(id); if (e) e.classList.remove('active'); });
+  ['gembaWarn','tipoWarn','govWarn'].forEach(id => { const e = document.getElementById(id); if (e) e.style.display = 'none'; });
+  renderEscada();
+  renderNiveis();
+}
+
+// ── TRAVA 2: CLASSIFICACAO POR PORQUE ─────────────────────────────────────────
+function setPorqueTipo(c, i, t) {
+  porquesMeta[c][i].tipo = (porquesMeta[c][i].tipo === t) ? '' : t;
+  const card = document.getElementById('card' + c + '_' + i);
+  if (card) card.querySelectorAll('.chip').forEach(ch => ch.classList.toggle('active', ch.dataset.t === porquesMeta[c][i].tipo));
+  refreshMetaAlert(c, i);
+}
+
+function onEvid(c, i) {
+  const el = document.getElementById('evid' + c + '_' + i);
+  if (el) porquesMeta[c][i].evidencia = el.value;
+  refreshMetaAlert(c, i);
+}
+
+function refreshMetaAlert(c, i) {
+  const m = porquesMeta[c][i];
+  const al = document.getElementById('metaAlert' + c + '_' + i);
+  if (!al) return;
+  const precisaEvid = (m.tipo === 'hipotese' || m.tipo === 'opiniao' || m.tipo === 'inferencia');
+  al.className = 'meta-alert' + ((precisaEvid && !m.evidencia.trim()) ? ' show' : '');
+}
+
 // ── CHAINS ────────────────────────────────────────────────────────────────────
 function initChains() {
   for (let c = 0; c < NUM_CAUSAS; c++) {
@@ -352,8 +513,15 @@ function buildChainForCausa(c) {
     const div = document.createElement('div');
     div.className = 'why-card ' + cls;
     div.id = 'card' + c + '_' + i;
-    div.innerHTML = '<div class="why-header"><div class="why-badge"><div class="why-num">' + (i+1) + '</div><span class="why-title">' + WHYS[i] + '</span></div></div><div class="why-input-row"><textarea id="ans' + c + '_' + i + '" placeholder="' + PH[i] + '" oninput="onType(' + c + ',' + i + ')">' + answers[c][i] + '</textarea></div><div class="dict-hint">Use o microfone do teclado para ditar por voz</div><div class="ai-feedback' + (feedbacks[c][i] ? ' show' : '') + '" id="fb' + c + '_' + i + '">' + (feedbacks[c][i] || '') + '</div>';
+    const chips = TIPO_PORQUE.map(tp =>
+      '<button class="chip' + (porquesMeta[c][i].tipo === tp.key ? ' active' : '') + '" data-t="' + tp.key + '" onclick="setPorqueTipo(' + c + ',' + i + ',\'' + tp.key + '\')">' + tp.label + '</button>'
+    ).join('');
+    const metaHtml = '<div class="meta-row"><span class="meta-label">Este porque e:</span>' + chips + '</div>'
+      + '<div class="evid-input"><textarea id="evid' + c + '_' + i + '" placeholder="Evidencia que sustenta: dado, foto, medicao, registro, observacao..." oninput="onEvid(' + c + ',' + i + ')">' + porquesMeta[c][i].evidencia + '</textarea></div>'
+      + '<div class="meta-alert" id="metaAlert' + c + '_' + i + '">Marque a evidencia que sustenta — uma hipotese nao deveria virar o proximo porque sem verificacao.</div>';
+    div.innerHTML = '<div class="why-header"><div class="why-badge"><div class="why-num">' + (i+1) + '</div><span class="why-title">' + WHYS[i] + '</span></div></div><div class="why-input-row"><textarea id="ans' + c + '_' + i + '" placeholder="' + PH[i] + '" oninput="onType(' + c + ',' + i + ')">' + answers[c][i] + '</textarea></div><div class="dict-hint">Use o microfone do teclado para ditar por voz</div>' + metaHtml + '<div class="ai-feedback' + (feedbacks[c][i] ? ' show' : '') + '" id="fb' + c + '_' + i + '">' + (feedbacks[c][i] || '') + '</div>';
     container.appendChild(div);
+    refreshMetaAlert(c, i);
   }
   updateCausaTab(c);
 }
@@ -374,6 +542,8 @@ function syncAnswersFromDOM(c) {
   for (let i = 0; i < 5; i++) {
     const el = document.getElementById('ans' + c + '_' + i);
     if (el) answers[c][i] = el.value;
+    const ev = document.getElementById('evid' + c + '_' + i);
+    if (ev) porquesMeta[c][i].evidencia = ev.value;
   }
 }
 function syncAllFromDOM() { for (let c = 0; c < NUM_CAUSAS; c++) syncAnswersFromDOM(c); }
@@ -395,24 +565,54 @@ function updateCausaTab(c) {
   if (filled > 0) tab.classList.add('filled'); else tab.classList.remove('filled');
 }
 
-// ── IA ────────────────────────────────────────────────────────────────────────
+// ── IA (com rigor do Sensei) ──────────────────────────────────────────────────
+function tipoPorqueLabel(k) {
+  const map = { fato: 'Fato', hipotese: 'Hipotese', opiniao: 'Opiniao', inferencia: 'Inferencia' };
+  return map[k] || 'nao classificado';
+}
+
 async function analyzeAll() {
   syncAllFromDOM();
   const problem = document.getElementById('problemDesc')?.value || 'Problema nao descrito';
   let temDados = false;
   for (let c = 0; c < NUM_CAUSAS; c++) { if (answers[c].filter(a => a.trim().length > 5).length >= 2) { temDados = true; break; } }
   if (!temDados) { alert('Preencha ao menos 2 respostas em alguma causa para analisar.'); return; }
+  const gembaTxt = analise.gemba === true ? 'Sim, condicao observada no Gemba'
+    : analise.gemba === false ? 'NAO — condicao ainda nao observada no Gemba (cobre isso)'
+    : 'nao informado';
+  const tipoTxt = analise.tipo ? ((TRIAGEM_TIPOS.find(t => t.key === analise.tipo) || {}).label || analise.tipo) : 'nao informado';
+  const nivelTxt = analise.nivel ? ((NIVEIS.find(n => n.key === analise.nivel) || {}).label || analise.nivel) : 'nao informado';
+  const govTxt = analise.governabilidade === 'escalar' ? 'precisa escalar (sistemico)'
+    : analise.governabilidade === 'dentro_alcada' ? 'dentro da alcada local'
+    : 'nao informado';
   const loader = document.getElementById('globalLoader');
   loader.className = 'loader show';
   for (let c = 0; c < NUM_CAUSAS; c++) {
     if (answers[c].filter(a => a.trim().length > 5).length < 2) continue;
-    const chain = answers[c].map((a, i) => a.trim() ? 'Porque ' + (i+1) + ': ' + a.trim() : '').filter(Boolean).join('\n');
+    const classif = answers[c].map((a, i) => {
+      if (!a.trim()) return '';
+      const m = porquesMeta[c][i];
+      const ev = m.evidencia.trim() ? '; evidencia: ' + m.evidencia.trim() : '; SEM evidencia registrada';
+      return 'Porque ' + (i+1) + ': "' + a.trim() + '" [classificado como: ' + tipoPorqueLabel(m.tipo) + ev + ']';
+    }).filter(Boolean).join('\n');
+    const content = SENSEI_PROMPT
+      + '\n\n--- CONTEXTO DESTA ANALISE ---'
+      + '\nProblema: ' + problem
+      + '\nGemba: ' + gembaTxt
+      + '\nTriagem (tratamento escolhido): ' + tipoTxt
+      + '\nNivel da causa: ' + nivelTxt
+      + '\nGovernabilidade: ' + govTxt
+      + '\n\nCadeia da ' + (c+1) + 'a causa mais provavel, com a classificacao que o usuario deu a cada porque:\n' + classif
+      + '\n\n--- SUA RESPOSTA ---'
+      + '\nAplique o rigor acima e retorne APENAS JSON, sem markdown, no formato:'
+      + '\n{"score":"XX%","feedbacks":["fb1","fb2","fb3","fb4","fb5"],"summary":"resumo","rootCause":"causa raiz util e atuavel"}'
+      + '\nRegras da resposta: (1) score = coerencia logica + qualidade da evidencia da cadeia, de 0 a 100%. (2) Cada feedback e uma provocacao curta de sensei sobre aquele porque: se for hipotese/opiniao/inferencia sem evidencia, cobre a evidencia; se citar "erro humano", traga a lideranca e classifique Skill/Rule/Knowledge; se citar "treinamento", exija evidencia de gap de competencia. (3) summary: leitura do sensei sobre a cadeia e o proximo passo, tratando a contramedida como experimento (resultado esperado). (4) rootCause: a causa controlavel mais profunda dentro da alcada. Idioma: Portugues do Brasil.';
     try {
       const resp = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentSession.access_token },
-        body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1000,
-          messages: [{ role: 'user', content: 'Voce e especialista em Lean Manufacturing. Analise a cadeia de 5 Porques para a ' + (c+1) + 'a causa mais provavel e retorne APENAS JSON sem markdown:\n\nProblema: ' + problem + '\nCausa ' + (c+1) + ':\n' + chain + '\n\nJSON:\n{"score":"XX%","feedbacks":["fb1","fb2","fb3","fb4","fb5"],"summary":"resumo","rootCause":"causa raiz"}' }] })
+        body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1500,
+          messages: [{ role: 'user', content: content }] })
       });
       if (resp.status === 401) { alert('Sessao expirada. Faca login novamente.'); doLogout(); return; }
       const data = await resp.json();
@@ -505,6 +705,13 @@ async function saveAnalysis() {
   const prob = document.getElementById('problemDesc')?.value || '';
   if (!prob.trim()) return false;
   if (!lastAnalysis.some(Boolean)) return false;
+  const analiseObj = {
+    gemba: analise.gemba,
+    tipo: analise.tipo,
+    nivel: analise.nivel,
+    governabilidade: analise.governabilidade,
+    porques_meta: porquesMeta.map(m => m.map(x => ({ tipo: x.tipo, evidencia: x.evidencia })))
+  };
   const record = {
     id: Date.now(),
     user_id: currentSession.user.id,
@@ -515,11 +722,20 @@ async function saveAnalysis() {
     responsible: document.getElementById('responsible')?.value || '',
     answers: answers.map(a => [...a]),
     last_analysis: [...lastAnalysis],
-    duration_min: Math.round((Date.now() - startTime) / 60000)
+    duration_min: Math.round((Date.now() - startTime) / 60000),
+    analise: analiseObj
   };
   try {
     const { error } = await sbClient.from('analises').insert(record);
-    if (error) { console.error('Erro ao salvar:', error); return false; }
+    if (error) {
+      // Provavel ausencia da coluna 'analise' no banco. Tenta salvar sem ela para nao perder o registro.
+      console.warn('Insert com analise falhou, tentando sem o campo analise:', error);
+      const semAnalise = { ...record };
+      delete semAnalise.analise;
+      const retry = await sbClient.from('analises').insert(semAnalise);
+      if (retry.error) { console.error('Erro ao salvar:', retry.error); return false; }
+      console.warn('Salvo SEM as travas. Rode o ALTER TABLE (coluna analise) no Supabase para habilitar o registro completo.');
+    }
     return true;
   } catch(e) { console.error('Erro ao salvar:', e); return false; }
 }
@@ -590,6 +806,19 @@ async function renderHistory() {
         const sm = laObj?.summary || r.summary || '';
         detalhe = (rc ? '<strong>Causa Raiz:</strong> ' + rc + '<br><br>' : '') + (sm ? '<strong>Resumo IA:</strong> ' + sm + '<br><br>' : '') + ans.map((a, i) => a && a.trim() ? '<strong>Porque ' + (i+1) + ':</strong> ' + a + '<br>' : '').filter(Boolean).join('');
       }
+      const an = r.analise;
+      let travasHtml = '';
+      if (an && (an.tipo || an.nivel || an.gemba === true || an.gemba === false || an.governabilidade)) {
+        const tl = an.tipo ? ((TRIAGEM_TIPOS.find(t => t.key === an.tipo) || {}).label || '') : '';
+        const nl = an.nivel ? ((NIVEIS.find(n => n.key === an.nivel) || {}).label || '') : '';
+        travasHtml = '<div style="margin-bottom:10px;padding:8px 10px;background:#EFF6FF;border-radius:8px;border-left:3px solid #3B82F6;font-size:11px;color:#1E40AF">'
+          + (an.gemba === true ? 'Gemba: visto. ' : an.gemba === false ? 'Gemba: nao visto. ' : '')
+          + (tl ? 'Triagem: ' + tl + '. ' : '')
+          + (nl ? nl + '. ' : '')
+          + (an.governabilidade === 'escalar' ? 'Requer escalonamento.' : an.governabilidade === 'dentro_alcada' ? 'Dentro da alcada.' : '')
+          + '</div>';
+      }
+      detalhe = travasHtml + detalhe;
       return '<div class="hist-item" onclick="toggleDetail(' + idx + ')"><div class="hist-item-header"><span class="hist-item-title">' + r.problem.substring(0,80) + (r.problem.length > 80 ? '...' : '') + '</span><span class="hist-item-date">' + r.date + '</span></div><div class="hist-item-meta"><span class="hist-badge">' + (r.area||'') + '</span><span class="hist-badge">' + (r.location||'Local nao informado') + '</span><span class="hist-badge">' + (r.responsible||'Resp. nao informado') + '</span><span class="hist-badge ' + (parseFloat(score) >= 70 ? 'green' : 'orange') + '">' + score + ' coerencia</span><span class="hist-badge">' + (isNovoFormato ? causasPreenchidas+' causa(s)' : causasPreenchidas+' porques') + '</span></div><div class="hist-detail" id="detail' + idx + '">' + detalhe + '</div></div>';
     }).join('');
   } catch(e) {
@@ -606,14 +835,19 @@ function toggleDetail(idx) {
 async function exportAllCSV() {
   const { data: db } = await sbClient.from('analises').select('*').eq('user_id', currentSession.user.id).order('created_at', { ascending: false });
   if (!db || !db.length) { alert('Nenhuma analise para exportar.'); return; }
-  const headers = ['Data','Problema','Local','Area','Responsavel','C1-Causa Raiz','C1-Score','C2-Causa Raiz','C2-Score','C3-Causa Raiz','C3-Score','Duracao(min)'];
+  const headers = ['Data','Problema','Local','Area','Responsavel','Gemba','Triagem','Nivel','Governabilidade','C1-Causa Raiz','C1-Score','C2-Causa Raiz','C2-Score','C3-Causa Raiz','C3-Score','Duracao(min)'];
   const rows = db.map(r => {
     const la = r.last_analysis || [];
-    return [r.date, r.problem, r.location, r.area, r.responsible,
+    const an = r.analise || {};
+    const gembaCsv = an.gemba === true ? 'Sim' : an.gemba === false ? 'Nao' : '';
+    const triagemCsv = an.tipo ? ((TRIAGEM_TIPOS.find(t => t.key === an.tipo) || {}).label || an.tipo) : '';
+    const nivelCsv = an.nivel || '';
+    const govCsv = an.governabilidade === 'escalar' ? 'Escalar' : an.governabilidade === 'dentro_alcada' ? 'Dentro da alcada' : '';
+    return [r.date, r.problem, r.location, r.area, r.responsible, gembaCsv, triagemCsv, nivelCsv, govCsv,
       la[0]?.rootCause||'', la[0]?.score||'', la[1]?.rootCause||'', la[1]?.score||'', la[2]?.rootCause||'', la[2]?.score||'', r.duration_min
     ].map(v => '"' + String(v||'').replace(/"/g,'""') + '"').join(',');
   });
-  const csv = '\uFEFF' + [headers.join(','), ...rows].join('\n');
+  const csv = '﻿' + [headers.join(','), ...rows].join('\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a'); a.href = url;
@@ -649,12 +883,15 @@ function resetApp() {
   answers = [['','','','',''],['','','','',''],['','','','','']];
   feedbacks = [['','','','',''],['','','','',''],['','','','','']];
   lastAnalysis = [null,null,null];
+  analise = { gemba: null, tipo: '', nivel: '', governabilidade: '' };
+  porquesMeta = [meta5(), meta5(), meta5()];
   currentCausa = 0; currentChainCausa = 0; chainMode = 'fwd';
   startTime = Date.now();
   document.getElementById('problemDesc').value = '';
   document.getElementById('location').value = '';
   document.getElementById('responsible').value = '';
   for (let c = 0; c < NUM_CAUSAS; c++) document.getElementById('whyChain' + c).innerHTML = '';
+  resetTravasUI();
   goPageDirect(0);
 }
 
