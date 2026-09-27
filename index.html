@@ -116,6 +116,14 @@ textarea{resize:none}
 .evid-input textarea{min-height:38px;font-size:12px}
 .meta-alert{margin-top:6px;font-size:11px;padding:6px 9px;border-radius:6px;background:#FEF3C7;color:#92400E;border-left:3px solid #D97706;display:none;line-height:1.5}
 .meta-alert.show{display:block}
+.foto-row{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}
+.foto-btn{display:inline-block;padding:6px 12px;border:1px solid #E2E8F0;border-radius:8px;background:#F8FAFC;color:#334155;font-size:12px;font-weight:600;cursor:pointer}
+.foto-btn:hover{border-color:#F97316;color:#F97316}
+.foto-btn input{display:none}
+.foto-status{font-size:11px;color:#64748B}
+.foto-preview{margin-top:6px}
+.foto-thumb{max-width:140px;max-height:140px;border-radius:8px;border:1px solid #E2E8F0;display:block}
+.foto-remove{margin-top:4px;padding:4px 10px;font-size:11px;border:1px solid #FECACA;background:#FEE2E2;color:#991B1B;border-radius:6px;cursor:pointer;font-family:Inter,sans-serif}
 #loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#F1F5F9}
 .login-card{background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:2rem;width:100%;max-width:380px;margin:1rem}
 .login-logo{width:52px;height:52px;background:#F97316;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;margin:0 auto 1rem}
@@ -323,7 +331,7 @@ let currentCausa = 0, currentChainCausa = 0, chainMode = 'fwd';
 let startTime = Date.now();
 
 // ── ESTADO DAS TRAVAS ──────────────────────────────────────────────────────────
-function meta5() { return [0,1,2,3,4].map(() => ({ tipo: '', evidencia: '' })); }
+function meta5() { return [0,1,2,3,4].map(() => ({ tipo: '', evidencia: '', foto: '', fotoPath: '' })); }
 let analise = { gemba: null, tipo: '', nivel: '', governabilidade: '' };
 let porquesMeta = [meta5(), meta5(), meta5()];
 
@@ -484,7 +492,104 @@ function refreshMetaAlert(c, i) {
   const al = document.getElementById('metaAlert' + c + '_' + i);
   if (!al) return;
   const precisaEvid = (m.tipo === 'hipotese' || m.tipo === 'opiniao' || m.tipo === 'inferencia');
-  al.className = 'meta-alert' + ((precisaEvid && !m.evidencia.trim()) ? ' show' : '');
+  al.className = 'meta-alert' + ((precisaEvid && !m.evidencia.trim() && !m.foto) ? ' show' : '');
+}
+
+// ── FOTO (Supabase Storage) ───────────────────────────────────────────────────
+function setFotoStatus(c, i, txt) {
+  const el = document.getElementById('fotoStatus' + c + '_' + i);
+  if (el) el.textContent = txt || '';
+}
+function renderFoto(c, i) {
+  const box = document.getElementById('fotoPreview' + c + '_' + i);
+  if (!box) return;
+  const url = porquesMeta[c][i].foto;
+  box.innerHTML = url
+    ? '<img src="' + url + '" class="foto-thumb" alt="evidencia"><button type="button" class="foto-remove" onclick="removerFoto(' + c + ',' + i + ')">Remover foto</button>'
+    : '';
+}
+function comprimirImagem(file, maxDim, q) {
+  maxDim = maxDim || 1600; q = q || 0.8;
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = function () {
+      let w = img.width, h = img.height;
+      if (w > maxDim || h > maxDim) { if (w >= h) { h = Math.round(h * maxDim / w); w = maxDim; } else { w = Math.round(w * maxDim / h); h = maxDim; } }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      canvas.toBlob(b => b ? resolve(b) : reject(new Error('sem blob')), 'image/jpeg', q);
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('nao carregou')); };
+    img.src = url;
+  });
+}
+async function anexarFoto(c, i, inputEl) {
+  const file = inputEl.files && inputEl.files[0];
+  if (!file) return;
+  if (!file.type || file.type.indexOf('image/') !== 0) { alert('Selecione uma imagem.'); inputEl.value = ''; return; }
+  setFotoStatus(c, i, 'Enviando foto...');
+  try {
+    let blob = file, ext = 'jpg';
+    try { blob = await comprimirImagem(file); } catch (e) { blob = file; ext = (file.name.split('.').pop() || 'jpg').toLowerCase(); }
+    const uid = currentSession.user.id;
+    const path = uid + '/' + Date.now() + '_c' + c + '_p' + i + '.' + ext;
+    const up = await sbClient.storage.from('evidencias').upload(path, blob, { contentType: blob.type || 'image/jpeg', upsert: true });
+    if (up.error) throw up.error;
+    const pub = sbClient.storage.from('evidencias').getPublicUrl(path);
+    porquesMeta[c][i].foto = pub.data.publicUrl;
+    porquesMeta[c][i].fotoPath = path;
+    setFotoStatus(c, i, '');
+    renderFoto(c, i);
+    refreshMetaAlert(c, i);
+  } catch (e) {
+    console.error('Erro ao enviar foto:', e);
+    setFotoStatus(c, i, '');
+    alert('Nao consegui enviar a foto. Confira se o bucket "evidencias" existe no Supabase (rode o SQL de storage).');
+  } finally {
+    inputEl.value = '';
+  }
+}
+async function removerFoto(c, i) {
+  const path = porquesMeta[c][i].fotoPath;
+  porquesMeta[c][i].foto = '';
+  porquesMeta[c][i].fotoPath = '';
+  renderFoto(c, i);
+  refreshMetaAlert(c, i);
+  if (path) { try { await sbClient.storage.from('evidencias').remove([path]); } catch (e) { console.warn('Nao removeu do storage:', e); } }
+}
+
+// ── TRAVA DE EVIDENCIA (nao avanca sem classificar/evidenciar) ─────────────────
+function checarTravaEvidencia() {
+  syncAllFromDOM();
+  for (let c = 0; c < NUM_CAUSAS; c++) {
+    for (let i = 0; i < 5; i++) {
+      const a = answers[c][i].trim();
+      if (!a) continue;
+      const m = porquesMeta[c][i];
+      if (!m.tipo) return { c: c, i: i, motivo: 'classificar' };
+      const precisaEvid = (m.tipo === 'hipotese' || m.tipo === 'opiniao' || m.tipo === 'inferencia');
+      if (precisaEvid && !m.evidencia.trim() && !m.foto) return { c: c, i: i, motivo: 'evidencia' };
+    }
+  }
+  return null;
+}
+function bloquearSeSemEvidencia() {
+  const f = checarTravaEvidencia();
+  if (!f) return false;
+  const nCausa = f.c + 1, nPorque = f.i + 1;
+  const msg = (f.motivo === 'classificar')
+    ? 'Antes de seguir: classifique o Porque ' + nPorque + ' da ' + nCausa + 'a causa (Fato, Hipotese, Opiniao ou Inferencia).'
+    : 'Antes de seguir: o Porque ' + nPorque + ' da ' + nCausa + 'a causa esta marcado como hipotese/opiniao/inferencia sem evidencia. Registre a evidencia (texto ou foto) — uma hipotese nao deveria virar o proximo porque sem verificacao.';
+  alert(msg);
+  const tabs = document.querySelectorAll('.tab');
+  goPage(1, tabs[1]);
+  switchCausa(f.c);
+  const card = document.getElementById('card' + f.c + '_' + f.i);
+  if (card && card.scrollIntoView) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  return true;
 }
 
 // ── CHAINS ────────────────────────────────────────────────────────────────────
@@ -516,10 +621,13 @@ function buildChainForCausa(c) {
     ).join('');
     const metaHtml = '<div class="meta-row"><span class="meta-label">Este porque e:</span>' + chips + '</div>'
       + '<div class="evid-input"><textarea id="evid' + c + '_' + i + '" placeholder="Evidencia que sustenta: dado, foto, medicao, registro, observacao..." oninput="onEvid(' + c + ',' + i + ')">' + porquesMeta[c][i].evidencia + '</textarea></div>'
+      + '<div class="foto-row"><label class="foto-btn">Anexar foto<input type="file" accept="image/*" onchange="anexarFoto(' + c + ',' + i + ',this)"></label><span class="foto-status" id="fotoStatus' + c + '_' + i + '"></span></div>'
+      + '<div class="foto-preview" id="fotoPreview' + c + '_' + i + '"></div>'
       + '<div class="meta-alert" id="metaAlert' + c + '_' + i + '">Marque a evidencia que sustenta — uma hipotese nao deveria virar o proximo porque sem verificacao.</div>';
     div.innerHTML = '<div class="why-header"><div class="why-badge"><div class="why-num">' + (i+1) + '</div><span class="why-title">' + WHYS[i] + '</span></div></div><div class="why-input-row"><textarea id="ans' + c + '_' + i + '" placeholder="' + PH[i] + '" oninput="onType(' + c + ',' + i + ')">' + answers[c][i] + '</textarea></div><div class="dict-hint">Use o microfone do teclado para ditar por voz</div>' + metaHtml + '<div class="ai-feedback' + (feedbacks[c][i] ? ' show' : '') + '" id="fb' + c + '_' + i + '">' + (feedbacks[c][i] || '') + '</div>';
     container.appendChild(div);
     refreshMetaAlert(c, i);
+    renderFoto(c, i);
   }
   updateCausaTab(c);
 }
@@ -571,6 +679,7 @@ function tipoPorqueLabel(k) {
 
 async function analyzeAll() {
   syncAllFromDOM();
+  if (bloquearSeSemEvidencia()) return;
   const problem = document.getElementById('problemDesc')?.value || 'Problema nao descrito';
   let temDados = false;
   for (let c = 0; c < NUM_CAUSAS; c++) { if (answers[c].filter(a => a.trim().length > 5).length >= 2) { temDados = true; break; } }
@@ -590,7 +699,7 @@ async function analyzeAll() {
     const classif = answers[c].map((a, i) => {
       if (!a.trim()) return '';
       const m = porquesMeta[c][i];
-      const ev = m.evidencia.trim() ? '; evidencia: ' + m.evidencia.trim() : '; SEM evidencia registrada';
+      const ev = m.evidencia.trim() ? '; evidencia: ' + m.evidencia.trim() + (m.foto ? ' (+foto anexada)' : '') : (m.foto ? '; evidencia: foto anexada' : '; SEM evidencia registrada');
       return 'Porque ' + (i+1) + ': "' + a.trim() + '" [classificado como: ' + tipoPorqueLabel(m.tipo) + ev + ']';
     }).filter(Boolean).join('\n');
     const content = SENSEI_PROMPT
@@ -708,7 +817,7 @@ async function saveAnalysis() {
     tipo: analise.tipo,
     nivel: analise.nivel,
     governabilidade: analise.governabilidade,
-    porques_meta: porquesMeta.map(m => m.map(x => ({ tipo: x.tipo, evidencia: x.evidencia })))
+    porques_meta: porquesMeta.map(m => m.map(x => ({ tipo: x.tipo, evidencia: x.evidencia, foto: x.foto || '', fotoPath: x.fotoPath || '' })))
   };
   const record = {
     id: Date.now(),
@@ -739,6 +848,7 @@ async function saveAnalysis() {
 }
 
 async function saveAndExport() {
+  if (bloquearSeSemEvidencia()) return;
   const saved = await saveAnalysis();
   const msg = document.createElement('div');
   msg.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:8px;font-size:13px;font-family:Inter,sans-serif;z-index:999;color:#fff';
@@ -787,7 +897,16 @@ async function renderHistory() {
           const laC = Array.isArray(la) ? la[c] : null;
           let bloco = '<div style="margin-bottom:10px;padding:8px 10px;background:#F8FAFC;border-radius:8px;border-left:3px solid #F97316">';
           bloco += '<strong style="color:#0A1628">' + labels[c] + ' mais Provavel</strong><br>';
-          ansC.forEach((a, i) => { if (a && a.trim()) bloco += '<strong>Porque ' + (i+1) + ':</strong> ' + a + '<br>'; });
+          const pm = (r.analise && r.analise.porques_meta && r.analise.porques_meta[c]) ? r.analise.porques_meta[c] : null;
+          ansC.forEach((a, i) => {
+            if (!a || !a.trim()) return;
+            bloco += '<strong>Porque ' + (i+1) + ':</strong> ' + a;
+            if (pm && pm[i]) {
+              if (pm[i].tipo) bloco += ' [' + tipoPorqueLabel(pm[i].tipo) + ']';
+              if (pm[i].foto) bloco += ' <a href="' + pm[i].foto + '" target="_blank" rel="noopener">ver foto</a>';
+            }
+            bloco += '<br>';
+          });
           if (laC) {
             bloco += '<span style="color:#065F46"><strong>Causa Raiz:</strong> ' + laC.rootCause + '</span><br>';
             if (laC.summary) bloco += '<span style="color:#475569;font-size:11px">' + laC.summary + '</span><br>';
@@ -873,6 +992,7 @@ function goPage(idx, tab) {
 }
 
 function goPageDirect(idx) {
+  if ((idx === 2 || idx === 3) && bloquearSeSemEvidencia()) return;
   const tabs = document.querySelectorAll('.tab');
   goPage(idx, tabs[idx]);
 }
